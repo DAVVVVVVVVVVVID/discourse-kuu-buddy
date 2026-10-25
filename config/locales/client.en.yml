@@ -3,7 +3,148 @@ en:
     admin:
       site_settings:
         categories:
-          TODO_plugin_name: "Plugin Name"
+          discourse_kuu_buddy: "KUU buddy board"
   js:
-    discourse_plugin_name:
-      placeholder: placeholder
+    kuu_buddy:
+      level: "Lv%{level}"
+      new_topic:
+        label: "Find a buddy"
+        description: "Find people for mahjong, hiking, a meal…"
+        button: "Find a buddy"
+      statuses:
+        recruiting: "Recruiting"
+        started: "Underway!"
+        started_full: "Full — it’s on!"
+        ended: "Ended"
+        expired: "Expired"
+      card_statuses:
+        recruiting: "Recruiting"
+        started: "Underway"
+        started_full: "Full · underway"
+        ended: "Ended"
+        expired: "Expired"
+      fields:
+        schedule: "When"
+        capacity: "People"
+        requirements: "Who can join"
+        requirements_short: "Who"
+        description: "Details"
+      filters:
+        recruiting: "Recruiting"
+        mine: "Organized by me"
+        joined: "Joined"
+      card:
+        count: "%{count} / %{capacity}"
+        spots_left:
+          one: "%{count} spot left"
+          other: "%{count} spots left"
+      form:
+        new_title: "Find a buddy"
+        edit_title: "Edit buddy topic"
+        activity: "Activity"
+        activity_placeholder: "e.g. Mahjong on Saturday"
+        capacity: "People (including you)"
+        capacity_hint:
+          one: "Looking for %{count} more person (%{min}–%{max} people)"
+          other: "Looking for %{count} more people (%{min}–%{max} people)"
+        capacity_decrease: "One fewer"
+        capacity_increase: "One more"
+        schedule: "When"
+        schedule_placeholder: "e.g. Around 19:00 this Saturday, any time at the weekend"
+        requirements: "Who can join"
+        requirements_placeholder: "Anyone is welcome"
+        description: "Details"
+        privacy_hint: "Don’t post phone numbers or your address — talk details over in the group chat"
+        chat_tip: "A group chat is created when you accept the first person, and you run it. For a first meeting, pick a public place."
+        publish: "Post"
+        save: "Save"
+        pending_approval: "Submitted. It will appear on the buddy board once approved."
+      panel:
+        spots_left:
+          one: "%{count} spot left"
+          other: "%{count} spots left"
+        started_detail: "%{count} / %{capacity} · not accepting new requests"
+        ended_detail: "%{count} took part · ended %{date}"
+        capacity:
+          one: "%{count} person (including the organizer)"
+          other: "%{count} people (including the organizer)"
+        no_requirements: "Anyone is welcome"
+        safety_tip: "For a first meeting, pick a public place"
+        out_of_chat:
+          one: "%{count} member couldn’t be added to the group chat (they may have turned off direct messages or blocked you). You can reply on the topic instead."
+          other: "%{count} members couldn’t be added to the group chat (they may have turned off direct messages or blocked you). You can reply on the topic instead."
+        expires_on: "Expires on %{date} if it hasn’t started"
+      actions:
+        edit: "Edit"
+        open_chat: "Open group chat"
+        change_to:
+          started: "Start"
+          ended: "End"
+          recruiting: "Reopen"
+        confirm_start: "Start the activity now? New requests won’t be accepted after this."
+        changed:
+          started: "It’s on!"
+          ended: "The activity has ended."
+          recruiting: "Recruiting again."
+      members:
+        title:
+          one: "Joined (%{count})"
+          other: "Joined (%{count})"
+        organizer: "Organizer"
+        menu: "Member actions"
+        remove: "Remove %{username}"
+        confirm_remove: "Remove %{username} from the activity? They’ll also be removed from the group chat and can’t ask to join again."
+      applications:
+        title:
+          one: "%{count} new request"
+          other: "%{count} new requests"
+        only_you: "Only you can see these"
+        applied: " (asked)"
+        no_message: "No message"
+        decline: "Decline"
+        accept: "Accept and add to chat"
+        confirm_decline: "Decline %{username}? They’ll be told “This one didn’t work out — maybe next time!” and can’t ask again."
+        accepted: "Accepted %{username} and added them to the group chat"
+        chat_unavailable: "Accepted %{username}, but they couldn’t be added to the group chat — they may have turned off direct messages or blocked you. You can reply on the topic instead."
+        chat_failed: "Accepted %{username}, but the group chat couldn’t be created or joined (you may have turned off direct messages or left the chat). You can reply on the topic instead."
+      join:
+        apply: "Ask to join"
+        pending: "Request sent — waiting for the organizer"
+        withdraw: "Withdraw"
+        confirm_withdraw: "Withdraw your request?"
+        withdrawn: "Request withdrawn"
+        member: "You’ve joined this activity"
+        leave: "Leave"
+        confirm_leave: "Leave this activity? You’ll also leave the group chat."
+        left: "You left the activity"
+        barred: "This one didn’t work out — maybe next time!"
+      apply:
+        title: "Ask to join “%{title}”"
+        message: "A note for the organizer"
+        message_placeholder: "e.g. I play Japanese mahjong and I’m free on Saturday evening"
+        tip: "Only the organizer can see your request. Once accepted, you’ll be added to the group chat."
+        submit: "Send request"
+        sent: "Request sent. Wait for the organizer to reply."
+      chat:
+        open: "Open"
+        no_messages: "No messages yet"
+        closed: "This group chat is closed; you can still read it"
+      end:
+        title: "Has the activity ended?"
+        intro: "The topic will leave the buddy board lists but stay on your profile, and no one can ask to join any more."
+        chat_question: "Keep the group chat “%{name}”?"
+        chat_keep_label: "Keep it"
+        chat_keep_hint: "It becomes a normal group chat, so everyone can keep talking and plan the next one"
+        chat_close_label: "Close it"
+        chat_close_hint: "Everyone can still read it, but no one can send messages"
+        not_yet: "Not yet"
+        confirm: "End it"
+      notifications:
+        applied: "%{username} asked to join your buddy topic"
+        applied_title: "New request"
+        accepted: "You’re in! You’ve been added to the group chat"
+        accepted_title: "Request accepted"
+        declined: "This one didn’t work out — maybe next time!"
+        declined_title: "Request result"
+        expired: "Your buddy topic expired before it started"
+        expired_title: "Buddy topic expired"

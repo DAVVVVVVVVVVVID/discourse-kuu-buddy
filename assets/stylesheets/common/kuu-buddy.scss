@@ -1,0 +1,601 @@
+// 品牌色（藏青、樱花粉、浅雾蓝、米白）和状态标签的颜色（Issue #1 界面 1）。主题组件可以覆盖
+:root {
+  --kuu-buddy-navy: #0a2d56;
+  --kuu-buddy-sakura: #ed8690;
+  --kuu-buddy-mist: #c0d1e4;
+  --kuu-buddy-cream: #fcf9f2;
+  --kuu-buddy-recruiting-color: #1e7b3c;
+  --kuu-buddy-recruiting-bg: #e6f4ea;
+}
+
+.kuu-buddy-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15em 0.6em;
+  border-radius: 999px;
+  font-size: var(--font-down-1);
+  font-weight: 600;
+  white-space: nowrap;
+
+  &--recruiting {
+    background: var(--kuu-buddy-recruiting-bg);
+    color: var(--kuu-buddy-recruiting-color);
+  }
+
+  &--started {
+    background: var(--kuu-buddy-navy);
+    color: #fff;
+  }
+
+  &--ended,
+  &--expired {
+    background: var(--primary-low);
+    color: var(--primary-medium);
+  }
+}
+
+// 帖子页上方面板（界面 3、5、6）
+.kuu-buddy-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: calc(
+    var(--topic-avatar-width) + var(--topic-body-width) +
+      (var(--topic-body-width-padding) * 2)
+  );
+  margin-bottom: var(--space-4);
+  padding: var(--space-4);
+  border-radius: var(--d-border-radius-large, 12px);
+  background: var(--kuu-buddy-cream);
+  color: var(--kuu-buddy-navy);
+
+  &__banner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  // 人满 / 活动开始：顶部藏青横幅（界面 6）
+  &--started &__banner {
+    margin: calc(var(--space-4) * -1) calc(var(--space-4) * -1) 0;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--d-border-radius-large, 12px)
+      var(--d-border-radius-large, 12px) 0 0;
+    background: var(--kuu-buddy-navy);
+    color: #fff;
+
+    .kuu-buddy-status--started {
+      padding: 0;
+      background: transparent;
+      font-size: var(--font-up-1);
+    }
+  }
+
+  &__organizer {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  &__organizer-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__organizer-name {
+    font-weight: 600;
+  }
+
+  &__organizer-meta {
+    font-size: var(--font-down-1);
+    color: var(--primary-medium);
+  }
+
+  &__chat-warning {
+    margin: 0;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--d-border-radius);
+    background: var(--danger-low);
+    color: var(--danger);
+    font-size: var(--font-down-1);
+  }
+
+  &__status-detail {
+    font-weight: 600;
+  }
+
+  &__fields {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin: 0;
+  }
+
+  &__field {
+    display: grid;
+    grid-template-columns: 5em 1fr;
+    gap: var(--space-2);
+
+    dt {
+      color: var(--primary-medium);
+    }
+
+    dd {
+      margin: 0;
+      white-space: pre-line;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  &__safety,
+  &__expiry {
+    margin: 0;
+    font-size: var(--font-down-1);
+    color: var(--primary-medium);
+  }
+}
+
+.kuu-buddy-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+
+  .btn-primary {
+    background: var(--kuu-buddy-navy);
+  }
+}
+
+// 第一楼的正文和面板内容一样（初始化器给第一楼加的类名）：普通用户整楼藏起来，
+// 标题旁的编辑笔也藏（标题只能用表单改）；管理员只藏正文，保留编辑和管理入口
+body.kuu-buddy-topic {
+  .topic-post.kuu-buddy-first-post {
+    display: none;
+  }
+
+  #topic-title .edit-topic__wrapper {
+    display: none;
+  }
+}
+
+.topic-post.kuu-buddy-first-post .cooked {
+  display: none;
+}
+
+// 列表卡片（界面 1）
+.kuu-buddy-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  color: var(--kuu-buddy-navy);
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-2);
+  }
+
+  &__title {
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+
+  &__line {
+    display: flex;
+    gap: var(--space-2);
+    font-size: var(--font-down-1);
+    color: var(--primary-high);
+  }
+
+  &__label {
+    flex-shrink: 0;
+    color: var(--primary-medium);
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-1);
+    font-size: var(--font-down-1);
+  }
+
+  &__count {
+    font-weight: 600;
+  }
+
+  &__spots {
+    color: var(--kuu-buddy-sakura);
+    font-weight: 600;
+  }
+}
+
+// 搭子广场页顶部的筛选（界面 1）
+.kuu-buddy-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: var(--space-2) 0 var(--space-3);
+
+  &__option {
+    border-radius: 999px;
+    background: var(--primary-very-low);
+    color: var(--kuu-buddy-navy);
+
+    &.--selected {
+      background: var(--kuu-buddy-navy);
+      color: #fff;
+
+      .d-button-label {
+        color: #fff;
+      }
+    }
+  }
+}
+
+// 右下角的「+ 找搭子」。手机上底栏还在，按钮放在底栏上方
+.kuu-buddy-new-button.btn-primary {
+  position: fixed;
+  right: var(--space-4);
+  bottom: calc(var(--space-6) + env(safe-area-inset-bottom));
+  z-index: z("timeline");
+  padding: var(--space-3) var(--space-4);
+  border-radius: 999px;
+  background: var(--kuu-buddy-sakura);
+  box-shadow: var(--shadow-card);
+  color: #fff;
+
+  .d-icon,
+  .d-button-label {
+    color: #fff;
+  }
+
+  .mobile-view & {
+    bottom: calc(5rem + env(safe-area-inset-bottom));
+  }
+}
+
+// 表单（界面 2）
+.kuu-buddy-stepper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+
+  &__value {
+    min-width: 2em;
+    font-size: var(--font-up-2);
+    font-weight: 600;
+    text-align: center;
+  }
+
+  &__hint {
+    color: var(--primary-medium);
+    font-size: var(--font-down-1);
+  }
+}
+
+.kuu-buddy-form-modal {
+  &__tip {
+    margin: var(--space-3) 0 0;
+    padding: var(--space-3);
+    border-radius: var(--d-border-radius);
+    background: var(--kuu-buddy-cream);
+    color: var(--kuu-buddy-navy);
+    font-size: var(--font-down-1);
+  }
+
+  &__submit.btn-primary {
+    background: var(--kuu-buddy-sakura);
+  }
+}
+
+// 已加入的成员（界面 3、5、6）：发起人标注，后面是虚线空位
+.kuu-buddy-members {
+  &__title {
+    margin-bottom: var(--space-2);
+    font-weight: 600;
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+
+    &.--out-of-chat .kuu-buddy-members__avatar img {
+      opacity: 0.5;
+    }
+  }
+
+  &__badge {
+    padding: 0 0.4em;
+    border-radius: 999px;
+    background: var(--kuu-buddy-sakura);
+    color: #fff;
+    font-size: var(--font-down-2);
+  }
+
+  &__menu.btn {
+    position: absolute;
+    top: -0.4em;
+    right: -0.6em;
+    min-height: 0;
+    padding: 0.15em 0.3em;
+    border: 1px solid var(--kuu-buddy-mist);
+    border-radius: 999px;
+    background: var(--secondary);
+
+    .d-icon {
+      color: var(--kuu-buddy-navy);
+    }
+  }
+
+  &__slot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border: 2px dashed var(--kuu-buddy-mist);
+    border-radius: 50%;
+    color: var(--kuu-buddy-mist);
+  }
+}
+
+// 发起人处理申请（界面 5）
+.kuu-buddy-applications {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+
+  &__header {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+  }
+
+  &__title {
+    font-weight: 600;
+  }
+
+  &__private {
+    font-size: var(--font-down-1);
+    color: var(--primary-medium);
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__item {
+    display: flex;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    border-radius: var(--d-border-radius);
+    background: var(--secondary);
+  }
+
+  &__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--space-1);
+    min-width: 0;
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  &__name {
+    font-weight: 600;
+  }
+
+  &__time {
+    font-size: var(--font-down-1);
+    color: var(--primary-medium);
+  }
+
+  &__message {
+    margin: 0;
+    overflow-wrap: anywhere;
+
+    &.--empty {
+      color: var(--primary-medium);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--space-2);
+  }
+
+  &__accept.btn-primary {
+    background: var(--kuu-buddy-sakura);
+  }
+}
+
+// 其他人底部的「申请加入」（界面 3、4）
+.kuu-buddy-join {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+
+  &:empty {
+    display: none;
+  }
+
+  &__apply.btn-primary {
+    width: 100%;
+    padding: var(--space-3);
+    border-radius: 999px;
+    background: var(--kuu-buddy-sakura);
+    font-size: var(--font-up-1);
+  }
+
+  &__pending,
+  &__member {
+    font-weight: 600;
+  }
+
+  &__barred {
+    color: var(--primary-medium);
+  }
+}
+
+// 群聊卡片（界面 6）
+.kuu-buddy-chat {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--kuu-buddy-mist);
+  border-radius: var(--d-border-radius);
+  background: var(--secondary);
+
+  &__icon {
+    color: var(--kuu-buddy-navy);
+    font-size: var(--font-up-2);
+  }
+
+  &__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &__name {
+    font-weight: 600;
+  }
+
+  &__last {
+    overflow: hidden;
+    color: var(--primary-medium);
+    font-size: var(--font-down-1);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__open.btn-primary {
+    border-radius: 999px;
+    background: var(--kuu-buddy-navy);
+  }
+
+  &.--closed {
+    opacity: 0.7;
+  }
+}
+
+// 列表卡片上的成员头像叠放 + 虚线空位（界面 1）
+.kuu-buddy-card {
+  &__avatars {
+    display: inline-flex;
+    align-items: center;
+
+    > * + * {
+      margin-left: -6px;
+    }
+  }
+
+  &__avatar img {
+    border: 2px solid var(--secondary);
+    border-radius: 50%;
+  }
+
+  &__slot {
+    width: 20px;
+    height: 20px;
+    border: 2px dashed var(--kuu-buddy-mist);
+    border-radius: 50%;
+    background: var(--secondary);
+  }
+}
+
+// 申请加入（界面 4）、活动结束（界面 7）
+.kuu-buddy-apply-modal,
+.kuu-buddy-end-modal {
+  &__tip {
+    margin: var(--space-3) 0 0;
+    color: var(--primary-medium);
+    font-size: var(--font-down-1);
+  }
+
+  &__submit.btn-primary,
+  &__confirm.btn-primary {
+    background: var(--kuu-buddy-sakura);
+  }
+}
+
+.kuu-buddy-end-modal {
+  &__chat {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin: var(--space-3) 0 0;
+    padding: 0;
+    border: 0;
+
+    legend {
+      margin-bottom: var(--space-2);
+      font-weight: 600;
+    }
+  }
+
+  &__choice {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    border: 1px solid var(--primary-low);
+    border-radius: var(--d-border-radius);
+    cursor: pointer;
+
+    &.--selected {
+      border-color: var(--kuu-buddy-navy);
+      background: var(--kuu-buddy-cream);
+    }
+
+    input {
+      margin-top: 0.2em;
+    }
+  }
+
+  &__choice-text {
+    display: flex;
+    flex-direction: column;
+    font-weight: normal;
+
+    strong {
+      color: var(--kuu-buddy-navy);
+    }
+
+    span {
+      color: var(--primary-medium);
+      font-size: var(--font-down-1);
+    }
+  }
+}

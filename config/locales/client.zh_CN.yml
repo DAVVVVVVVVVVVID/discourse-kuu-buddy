@@ -1,0 +1,151 @@
+zh_CN:
+  admin_js:
+    admin:
+      site_settings:
+        categories:
+          discourse_kuu_buddy: "KUU 搭子广场"
+  js:
+    kuu_buddy:
+      level: "Lv%{level}"
+      new_topic:
+        label: "找搭子"
+        description: "约人一起打麻将、爬山、吃饭……"
+        button: "找搭子"
+      statuses:
+        recruiting: "招募中"
+        started: "活动开始！"
+        started_full: "人数已满，活动开始！"
+        ended: "已结束"
+        expired: "已过期"
+      # 列表卡片上的状态标签（界面 1），比帖子页的短
+      card_statuses:
+        recruiting: "招募中"
+        started: "活动开始"
+        started_full: "人满·活动开始"
+        ended: "已结束"
+        expired: "已过期"
+      fields:
+        schedule: "时间"
+        capacity: "人数"
+        requirements: "参加条件"
+        requirements_short: "条件"
+        description: "说明"
+      filters:
+        recruiting: "招募中"
+        mine: "我发起的"
+        joined: "我参加的"
+      card:
+        count: "%{count} / %{capacity} 人"
+        spots_left:
+          one: "还差 %{count} 人"
+          other: "还差 %{count} 人"
+      form:
+        new_title: "发起找搭子"
+        edit_title: "修改找搭子"
+        activity: "活动内容"
+        activity_placeholder: "例：周六一起打麻将"
+        capacity: "人数（含你自己）"
+        capacity_hint:
+          one: "还要找 %{count} 个人（%{min}～%{max} 人）"
+          other: "还要找 %{count} 个人（%{min}～%{max} 人）"
+        capacity_decrease: "减少一人"
+        capacity_increase: "增加一人"
+        schedule: "时间"
+        schedule_placeholder: "例：这周六 19:00 左右、周末都行"
+        requirements: "参加条件"
+        requirements_placeholder: "无条件，欢迎所有人"
+        description: "补充说明"
+        privacy_hint: "不要填手机号、详细住址，群聊里再细聊"
+        chat_tip: "接受第一个人后会自动建群聊，你是群主。第一次见面建议约在公共场所。"
+        publish: "发布"
+        save: "保存"
+        pending_approval: "已提交，审核通过后就会出现在搭子广场。"
+      panel:
+        spots_left:
+          one: "还差 %{count} 人"
+          other: "还差 %{count} 人"
+        started_detail: "%{count} / %{capacity} 人 · 不再接受新的申请"
+        ended_detail: "%{count} 人参加 · %{date}结束"
+        capacity:
+          one: "%{count} 人（含发起人）"
+          other: "%{count} 人（含发起人）"
+        no_requirements: "无条件，欢迎所有人"
+        safety_tip: "第一次见面建议约在公共场所"
+        out_of_chat:
+          one: "有 %{count} 位成员没能拉进群聊（可能关了私聊或屏蔽了你），可以在帖子下面回复联系"
+          other: "有 %{count} 位成员没能拉进群聊（可能关了私聊或屏蔽了你），可以在帖子下面回复联系"
+        expires_on: "%{date} 前还没开始的话会自动过期"
+      actions:
+        edit: "修改"
+        open_chat: "打开群聊"
+        change_to:
+          started: "开始活动"
+          ended: "活动结束"
+          recruiting: "重新开放"
+        confirm_start: "现在开始活动吗？开始后不再接受新的申请。"
+        changed:
+          started: "活动开始啦！"
+          ended: "活动已结束。"
+          recruiting: "已重新开放招募。"
+      members:
+        title:
+          one: "已加入（%{count}）"
+          other: "已加入（%{count}）"
+        organizer: "发起人"
+        menu: "成员操作"
+        remove: "移出 %{username}"
+        confirm_remove: "要把 %{username} 移出活动吗？对方会同时被移出群聊，也不能再申请这个帖子。"
+      applications:
+        title:
+          one: "新的申请 %{count}"
+          other: "新的申请 %{count}"
+        only_you: "只有你能看到"
+        applied: "申请"
+        no_message: "没有留言"
+        decline: "婉拒"
+        accept: "接受，拉进群聊"
+        confirm_decline: "要婉拒 %{username} 吗？对方会收到「这次没能加入，下次再约～」，不能再申请这个帖子。"
+        accepted: "已接受 %{username}，拉进群聊了"
+        chat_unavailable: "已接受 %{username}，但没能拉进群聊：对方可能关了私聊或屏蔽了你。可以在帖子下面回复联系。"
+        chat_failed: "已接受 %{username}，但群聊没能建好或加进去（你可能关了私聊，或者已经退出了群聊）。可以在帖子下面回复联系。"
+      join:
+        apply: "申请加入"
+        pending: "已申请，等发起人确认"
+        withdraw: "撤回"
+        confirm_withdraw: "要撤回申请吗？"
+        withdrawn: "已撤回申请"
+        member: "你已加入这个活动"
+        leave: "退出"
+        confirm_leave: "要退出这个活动吗？你会同时离开群聊。"
+        left: "已退出活动"
+        barred: "这次没能加入，下次再约～"
+      apply:
+        title: "申请加入「%{title}」"
+        message: "想对发起人说的话"
+        message_placeholder: "比如：我会打日麻，周六晚上有空"
+        tip: "只有发起人能看到你的申请。发起人接受后，你会被拉进活动群聊。"
+        submit: "发送申请"
+        sent: "申请已发送，等发起人确认吧"
+      chat:
+        open: "进群"
+        no_messages: "还没有消息"
+        closed: "群聊已关闭，可以查看聊天记录"
+      end:
+        title: "活动结束了吗？"
+        intro: "结束后帖子不再出现在搭子广场的列表里，仍留在你的个人主页上，也不能再申请。"
+        chat_question: "群聊「%{name}」要保留吗？"
+        chat_keep_label: "保留群聊"
+        chat_keep_hint: "变成普通群聊，大家可以继续聊、下次再约"
+        chat_close_label: "关闭群聊"
+        chat_close_hint: "大家还能看到聊天记录，但不能再发消息"
+        not_yet: "还没结束"
+        confirm: "确认结束"
+      notifications:
+        applied: "%{username} 申请加入你的找搭子"
+        applied_title: "新的申请"
+        accepted: "申请通过啦，已经拉你进群聊"
+        accepted_title: "申请通过"
+        declined: "这次没能加入，下次再约～"
+        declined_title: "申请结果"
+        expired: "你的找搭子帖招募了很久还没开始，已经过期"
+        expired_title: "找搭子帖已过期"
