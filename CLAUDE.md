@@ -54,6 +54,8 @@
 - 系统测试要前端构建：
   - core 的前端由 Rolldown 构建（`bin/dev` 里的 ember 那一半，或者单独 `docker exec -d -u discourse -w /src discourse_dev bash -lc 'pnpm --dir frontend/discourse start'`），进程不在时系统测试报 `Frontend build error`。Rolldown 起来以后约占 2.8GB
   - **插件的 JS 不归 Rolldown 管**，由 Rails 开发服务器里的监视进程编译到 `~/discourse/app/assets/generated/discourse-kuu-buddy`。没开 `bin/dev` 时，改了插件 JS 要手动编译一次：`docker exec -u discourse -w /src -e LOAD_PLUGINS=1 discourse_dev bin/rake assets:precompile:build_plugins`，否则系统测试跑的是旧代码（新插件第一次连页面都不显示）
+- **测试环境的样式表只在第一次跑系统测试时算一次版本号**，之后改了 SCSS 不会重新编译（现象：系统测试、截图里插件的新样式缺失）。删掉本插件那份清单再跑：`rm -f ~/discourse/tmp/cache/assets/test/stylesheet-manifest-test_9`（只删 `_9`，别的编号是别的会话的）
+- 截图（7 个界面，电脑 + iPhone 宽度）：本地的 `spec/system/screenshots_spec.rb`（写在 `.git/info/exclude` 里，不提交），`kuu-rspec spec/system/screenshots_spec.rb`，图片在 `screenshots/`。用的是测试库，不碰共用的开发库；测试环境没有 FKB Pro 和 KUU 主题，样式以插件自己的为准
 - lint 在容器里跑：`docker exec -u discourse -w /src discourse_dev bin/lint --fix plugins/discourse-kuu-buddy/<文件...>`。CI 还会跑插件自己的 `pnpm lint`（含类型检查）：`docker exec -u discourse -w /src/plugins/discourse-kuu-buddy discourse_dev pnpm lint`
   - `bin/lint` 会不带 `--frozen-lockfile` 装一次依赖，把 `pnpm-lock.yaml` 改掉。提交前 `git checkout pnpm-lock.yaml`
   - rubocop 自动改出的长行 stree 不会再格式化，看到 rubocop 有 `corrected` 时再跑一遍 `bin/lint --fix`

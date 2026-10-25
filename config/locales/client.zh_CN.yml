@@ -6,6 +6,7 @@ zh_CN:
           discourse_kuu_buddy: "KUU 搭子广场"
   js:
     kuu_buddy:
+      level: "Lv%{level}"
       new_topic:
         label: "找搭子"
         description: "约人一起打麻将、爬山、吃饭……"
@@ -99,7 +100,7 @@ zh_CN:
           one: "新的申请 %{count}"
           other: "新的申请 %{count}"
         only_you: "只有你能看到"
-        applied: "申请于"
+        applied: "申请"
         no_message: "没有留言"
         decline: "婉拒"
         accept: "接受，拉进群聊"

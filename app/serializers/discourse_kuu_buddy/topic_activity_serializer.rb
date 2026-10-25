@@ -129,7 +129,24 @@ module DiscourseKuuBuddy
     end
 
     def user_json(user)
-      BasicUserSerializer.new(user, root: false).as_json if user
+      return if user.nil?
+
+      json = BasicUserSerializer.new(user, root: false).as_json
+      json[:level] = levels.fetch(user.id, 1) if points_enabled?
+      json
+    end
+
+    # 积分插件装着时，发起人、成员、申请人名字旁显示等级（界面 3、5）。没有积分账户的是 1 级，和积分插件一样
+    def levels
+      @levels ||=
+        ::DiscourseKuuPoints::Decoration
+          .for_users([object.topic&.user_id, *object.applications.in_progress.pluck(:user_id)])
+          .transform_values { it[:level] }
+    end
+
+    def points_enabled?
+      defined?(::DiscourseKuuPoints::Decoration) && SiteSetting.respond_to?(:kuu_points_enabled) &&
+        SiteSetting.kuu_points_enabled
     end
   end
 end

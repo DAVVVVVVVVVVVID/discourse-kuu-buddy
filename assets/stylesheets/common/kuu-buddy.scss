@@ -146,7 +146,18 @@
   }
 }
 
-// 第一楼的正文和面板内容一样，藏起来（初始化器给第一楼加的类名）
+// 第一楼的正文和面板内容一样（初始化器给第一楼加的类名）：普通用户整楼藏起来，
+// 标题旁的编辑笔也藏（标题只能用表单改）；管理员只藏正文，保留编辑和管理入口
+body.kuu-buddy-topic {
+  .topic-post.kuu-buddy-first-post {
+    display: none;
+  }
+
+  #topic-title .edit-topic__wrapper {
+    display: none;
+  }
+}
+
 .topic-post.kuu-buddy-first-post .cooked {
   display: none;
 }
@@ -316,10 +327,19 @@
     font-size: var(--font-down-2);
   }
 
-  &__menu {
+  &__menu.btn {
     position: absolute;
-    top: -0.5em;
-    right: -0.9em;
+    top: -0.4em;
+    right: -0.6em;
+    min-height: 0;
+    padding: 0.15em 0.3em;
+    border: 1px solid var(--kuu-buddy-mist);
+    border-radius: 999px;
+    background: var(--secondary);
+
+    .d-icon {
+      color: var(--kuu-buddy-navy);
+    }
   }
 
   &__slot {
@@ -567,6 +587,11 @@
   &__choice-text {
     display: flex;
     flex-direction: column;
+    font-weight: normal;
+
+    strong {
+      color: var(--kuu-buddy-navy);
+    }
 
     span {
       color: var(--primary-medium);

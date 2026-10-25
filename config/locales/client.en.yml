@@ -6,6 +6,7 @@ en:
           discourse_kuu_buddy: "KUU buddy board"
   js:
     kuu_buddy:
+      level: "Lv%{level}"
       new_topic:
         label: "Find a buddy"
         description: "Find people for mahjong, hiking, a meal…"
@@ -98,7 +99,7 @@ en:
           one: "%{count} new request"
           other: "%{count} new requests"
         only_you: "Only you can see these"
-        applied: "Asked"
+        applied: " (asked)"
         no_message: "No message"
         decline: "Decline"
         accept: "Accept and add to chat"

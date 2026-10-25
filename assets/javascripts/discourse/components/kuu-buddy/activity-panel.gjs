@@ -1,9 +1,10 @@
 import Component from "@glimmer/component";
 import { action, get, set } from "@ember/object";
 import { service } from "@ember/service";
+import bodyClass from "discourse/helpers/body-class";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
-import { longDate } from "discourse/lib/formatter";
+import { shortDate } from "discourse/lib/formatter";
 import dAgeWithTooltip from "discourse/ui-kit/helpers/d-age-with-tooltip";
 import dAvatar from "discourse/ui-kit/helpers/d-avatar";
 import { i18n } from "discourse-i18n";
@@ -12,11 +13,13 @@ import ApplicationsList from "./applications-list.gjs";
 import ChatCard from "./chat-card.gjs";
 import JoinBar from "./join-bar.gjs";
 import MembersRow from "./members-row.gjs";
+import UserLevel from "./user-level.gjs";
 
 // 帖子页标题下方（界面 3、5、6）：状态、发起人、时间 / 人数 / 条件 / 说明四行、已加入的成员、
 // 群聊卡片（成员才有）、发起人的按钮和申请列表，其他人底部的「申请加入」。
 // 第一楼正文和这里内容一样，由 CSS 藏起来（见初始化器里的 post-class）
 export default class ActivityPanel extends Component {
+  @service currentUser;
   @service dialog;
 
   // 用 get 读：申请、接受后 set 进来的新值，以及帖子重新加载时的新值，才会重新渲染
@@ -55,7 +58,7 @@ export default class ActivityPanel extends Component {
       case "ended":
         return i18n("kuu_buddy.panel.ended_detail", {
           count: member_count,
-          date: longDate(ended_at),
+          date: shortDate(ended_at),
         });
       default:
         return null;
@@ -73,7 +76,7 @@ export default class ActivityPanel extends Component {
   }
 
   get expiresOn() {
-    return this.activity.expires_at && longDate(this.activity.expires_at);
+    return this.activity.expires_at && shortDate(this.activity.expires_at);
   }
 
   // 发起人看到：有成员没能拉进群聊（关了私聊、屏蔽了发起人等）
@@ -112,6 +115,10 @@ export default class ActivityPanel extends Component {
 
   <template>
     {{#if this.activity}}
+      {{! 第一楼和标题由表单生成：普通用户这里藏掉第一楼和标题旁的编辑笔，管理员照常看到 }}
+      {{#unless this.currentUser.staff}}
+        {{bodyClass "kuu-buddy-topic"}}
+      {{/unless}}
       <div class="kuu-buddy-panel kuu-buddy-panel--{{this.status}}">
         <div class="kuu-buddy-panel__banner">
           <span class="kuu-buddy-status kuu-buddy-status--{{this.status}}">
@@ -135,6 +142,7 @@ export default class ActivityPanel extends Component {
             <div class="kuu-buddy-panel__organizer-text">
               <span class="kuu-buddy-panel__organizer-name">
                 {{this.activity.organizer.username}}
+                <UserLevel @user={{this.activity.organizer}} />
               </span>
               <span class="kuu-buddy-panel__organizer-meta">
                 {{i18n "kuu_buddy.members.organizer"}}

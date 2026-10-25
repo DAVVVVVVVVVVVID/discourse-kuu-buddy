@@ -10,6 +10,7 @@ import DButton from "discourse/ui-kit/d-button";
 import dAgeWithTooltip from "discourse/ui-kit/helpers/d-age-with-tooltip";
 import dAvatar from "discourse/ui-kit/helpers/d-avatar";
 import { i18n } from "discourse-i18n";
+import UserLevel from "./user-level.gjs";
 
 // 发起人处理申请（界面 5）：「新的申请 2」（只有你能看到），每条头像、名字、什么时候申请、留言，
 // 「婉拒」「接受，拉进群聊」。人满或活动开始后不能再接受，只能婉拒
@@ -111,9 +112,11 @@ export default class ApplicationsList extends Component {
                   <span class="kuu-buddy-applications__name">
                     {{application.user.username}}
                   </span>
+                  <UserLevel @user={{application.user}} />
                   <span class="kuu-buddy-applications__time">
-                    {{i18n "kuu_buddy.applications.applied"}}
-                    {{dAgeWithTooltip application.created_at}}
+                    {{dAgeWithTooltip application.created_at addAgo=true}}{{i18n
+                      "kuu_buddy.applications.applied"
+                    }}
                   </span>
                 </div>
                 <p

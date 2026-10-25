@@ -81,6 +81,26 @@ RSpec.describe DiscourseKuuBuddy::ApplicationsController do
     end
   end
 
+  describe "levels from the points plugin" do
+    fab!(:application) { Fabricate(:kuu_buddy_application, activity:, user: applicant) }
+
+    it "leaves levels out without the points plugin" do
+      sign_in(organizer)
+
+      expect(topic_activity["organizer"]).not_to have_key("level")
+    end
+
+    # CI 不装积分插件，本地装着时才跑
+    it "shows levels when the points plugin is on" do
+      skip("discourse-kuu-points is not installed") if !defined?(DiscourseKuuPoints::Decoration)
+      SiteSetting.kuu_points_enabled = true
+      sign_in(organizer)
+
+      expect(topic_activity["organizer"]).to include("level" => 1)
+      expect(topic_activity["applications"].first["user"]).to include("level" => 1)
+    end
+  end
+
   describe "who sees the requests" do
     fab!(:application) do
       Fabricate(:kuu_buddy_application, activity:, user: applicant, message: "我会打日麻")

@@ -85,11 +85,19 @@ RSpec.describe "Posting and managing a buddy topic" do
       expect(activity.reload.status).to eq("ended")
     end
 
-    it "hides the edit button on the first post" do
+    # 第一楼和标题由表单生成：发起人看不到第一楼和标题旁的编辑笔，管理员照常能看到、能编辑
+    it "hides the generated first post and the title pencil from the organizer, not from staff" do
       topic_page.visit_topic(topic)
 
-      expect(topic_page).to have_post_more_actions(first_post)
-      expect(page).to have_no_css("#post_1 .post-controls .edit")
+      expect(page).to have_css(".kuu-buddy-panel")
+      expect(page).to have_no_css("#post_1", visible: :visible)
+      expect(page).to have_no_css("#topic-title .edit-topic", visible: :visible)
+
+      sign_in(Fabricate(:admin))
+      topic_page.visit_topic(topic)
+
+      expect(page).to have_css("#post_1", visible: :visible)
+      expect(page).to have_no_css("body.kuu-buddy-topic")
     end
   end
 
