@@ -117,7 +117,10 @@ RSpec.describe "Posting and managing a buddy topic" do
     visit "/c/#{category.slug}/#{category.id}"
 
     card = find(".kuu-buddy-card[data-topic-id='#{recruiting.topic_id}']")
-    expect(card).to have_css(".kuu-buddy-status--recruiting", text: "招募中")
+    expect(page).to have_css(
+      ".kuu-buddy-card-status[data-topic-id='#{recruiting.topic_id}'].kuu-buddy-status--recruiting",
+      text: "招募中",
+    )
     expect(card).to have_css(".kuu-buddy-card__line[data-field='requirements']", text: "会打日麻")
     expect(card).to have_css(".kuu-buddy-card__count", text: "1 / 4 人")
     expect(card).to have_css(".kuu-buddy-card__spots", text: "还差 3 人")

@@ -28,6 +28,7 @@
 - 列表筛选（`kuu_buddy` 参数）：「招募中」「我发起的」，都不选时显示全部（招募中 + 活动开始）。「我发起的」连自己已结束、过期的一起显示
 - 第一楼正文和帖子上方的面板内容一样，插件开着时由 CSS 藏起来（`post-class` 加 `kuu-buddy-first-post`）
 - 个人主页放出隐藏帖：和二手插件共用 `KuuProfileTopics`（plugin.rb 开头那一段，两个插件要保持一样，二手 Issue #19）。各插件往 `SOURCES` 登记自己的来源、各自注册 modifier，条件由 `reveal` 合成一个 OR。**不能只注册一次**：core 只在登记 modifier 的插件开着时才执行它
+- **不要用包裹型的 `topic-link` outlet**：它只能有一个插件用，二手插件在用。搭子以前也包了它，结果二手卡片不见、管理员每行看到警告（Issue #6，2026-10-25 线上事故）。`about.json` 让 CI 一起装二手插件，`spec/system/with_market_spec.rb` 测两种卡片同时在
 - custom 类型的站内通知只能登记一种显示，二手插件也登记了。本插件等第一次换页时在当时登记的显示上再包一层（`lib/kuu-buddy-notifications.js`），不会覆盖二手的
 - 申请和成员是同一张表 `kuu_buddy_applications`：pending / withdrawn / declined / accepted（成员）/ left（自己退出，可以再申请）/ removed（被移出，不能再申请）
 - 群聊（PR #3 起）：
@@ -45,7 +46,7 @@
 
 ## 和主题的分工
 - 主题组件「KUU 自定义组件」（`~/discourse/plugins/discourse-kuu-theme`）负责：把搭子广场加进「独立页面」（「‹ 首页 搭子广场」顶栏）、侧边栏入口、手机瀑布流排除这个分类（`waterfall_excluded_category_ids`，否则手机上卡片被瀑布流接管）。KUU 给主题开 Issue
-- 插件负责：列表卡片（`topic-link` 插座包住标题）、筛选、帖子页面板、表单、样式。话题列表项上加类名 `kuu-buddy-activity`、`kuu-buddy-status-<状态>`，主题需要时照着写 CSS
+- 插件负责：列表卡片（标题旁的状态挂 `topic-list-after-title`，标题下方的内容挂 `topic-list-main-link-bottom`）、筛选、帖子页面板、表单、样式。话题列表项上加类名 `kuu-buddy-activity`、`kuu-buddy-status-<状态>`，主题需要时照着写 CSS
 - 品牌色：藏青 `#0A2D56`、樱花粉 `#ED8690`、浅雾蓝 `#C0D1E4`、米白 `#FCF9F2`；招募中标签绿 `#1E7B3C` 底 `#E6F4EA`
 
 ## 开发环境（共用，先读 `~/.claude/CLAUDE.md`）

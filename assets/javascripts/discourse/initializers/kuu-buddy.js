@@ -1,7 +1,8 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
 import Category from "discourse/models/category";
+import ActivityCard from "../components/kuu-buddy/activity-card.gjs";
+import ActivityCardStatus from "../components/kuu-buddy/activity-card-status.gjs";
 import ActivityPanel from "../components/kuu-buddy/activity-panel.gjs";
-import ActivityTopicLink from "../components/kuu-buddy/activity-topic-link.gjs";
 import BuddyFilters from "../components/kuu-buddy/buddy-filters.gjs";
 import ActivityForm from "../components/kuu-buddy/modal/activity-form.gjs";
 import { buddyCategoryId } from "../lib/kuu-buddy.js";
@@ -41,7 +42,9 @@ export default {
         refreshModel: true,
       });
       api.renderInOutlet("discovery-list-container-top", BuddyFilters);
-      api.renderInOutlet("topic-link", ActivityTopicLink);
+      // 列表卡片：标题旁的状态 + 标题下方的内容。不用包裹型的 topic-link（二手插件在用，Issue #6）
+      api.renderInOutlet("topic-list-after-title", ActivityCardStatus);
+      api.renderInOutlet("topic-list-main-link-bottom", ActivityCard);
 
       // 第一楼由表单生成，发起人用「修改」按钮改；管理员保留普通编辑
       api.registerValueTransformer(

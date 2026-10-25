@@ -1,7 +1,8 @@
 {
   "tests": {
     "requiredPlugins": [
-      "https://github.com/DAVVVVVVVVVVVID/discourse-kuu-new-topic"
+      "https://github.com/DAVVVVVVVVVVVID/discourse-kuu-new-topic",
+      "https://github.com/DAVVVVVVVVVVVID/discourse-kuu-market"
     ]
   }
 }
