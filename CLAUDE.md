@@ -52,6 +52,7 @@
 - 本仓库在 WSL 的 `~/discourse/plugins/discourse-kuu-buddy`，Discourse 源码在 `~/discourse`（官方仓库，不要改）
 - **容器、开发服务器、内存是几个会话共用的**：`discourse_dev` 在跑就直接用，不停、不重启；开发服务器在跑就直接用，不要 kill。重任务（系统测试、截图、重启开发服务器）用 `flock ~/discourse/tmp/kuu-heavy.lock` 排队，跑之前看 `free -m`，可用不到 1G 先等
 - 测试：在本目录执行 `kuu-rspec spec/xxx_spec.rb`（本插件用 `discourse_test_9`），加了迁移先 `kuu-rspec --migrate`。只跑和改动相关的文件，整套交给 GitHub CI
+  - 本地会加载所有插件，别的插件的代码也会查本插件的表（反过来也一样，比如 `KuuProfileTopics` 的来源）。别的插件加了迁移、本地测试突然报缺表或 500 时，先 `kuu-rspec --migrate`
 - 系统测试要前端构建：
   - core 的前端由 Rolldown 构建（`bin/dev` 里的 ember 那一半，或者单独 `docker exec -d -u discourse -w /src discourse_dev bash -lc 'pnpm --dir frontend/discourse start'`），进程不在时系统测试报 `Frontend build error`。Rolldown 起来以后约占 2.8GB
   - **插件的 JS 不归 Rolldown 管**，由 Rails 开发服务器里的监视进程编译到 `~/discourse/app/assets/generated/discourse-kuu-buddy`。没开 `bin/dev` 时，改了插件 JS 要手动编译一次：`docker exec -u discourse -w /src -e LOAD_PLUGINS=1 discourse_dev bin/rake assets:precompile:build_plugins`，否则系统测试跑的是旧代码（新插件第一次连页面都不显示）
