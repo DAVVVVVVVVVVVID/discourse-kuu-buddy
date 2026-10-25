@@ -5,9 +5,7 @@ RSpec.describe "Asking to join and managing members" do
   fab!(:organizer) { Fabricate(:user, trust_level: TrustLevel[1], refresh_auto_groups: true) }
   fab!(:applicant) { Fabricate(:user, trust_level: TrustLevel[1], refresh_auto_groups: true) }
   fab!(:category) { Fabricate(:category, name: "Buddy board") }
-  fab!(:topic) do
-    Fabricate(:topic, user: organizer, category:, title: "Mahjong on Saturday night")
-  end
+  fab!(:topic) { Fabricate(:topic, user: organizer, category:, title: "Mahjong on Saturday night") }
   fab!(:first_post) { Fabricate(:post, topic:, user: organizer) }
   fab!(:activity) { Fabricate(:kuu_buddy_activity, topic:, title: "周六打麻将", capacity: 2) }
 
@@ -129,7 +127,9 @@ RSpec.describe "Asking to join and managing members" do
       sign_in(organizer)
       topic_page.visit_topic(topic)
 
-      find(".kuu-buddy-members__item[data-username='#{applicant.username}'] .kuu-buddy-members__menu").click
+      find(
+        ".kuu-buddy-members__item[data-username='#{applicant.username}'] .kuu-buddy-members__menu",
+      ).click
       find(".kuu-buddy-members__remove").click
       dialog.click_yes
 
