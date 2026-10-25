@@ -99,6 +99,34 @@ RSpec.describe DiscourseKuuBuddy::Activity::AcceptApplication do
     end
   end
 
+  # chat 加人时系统账号也进了群，算进 chat 的人数上限；人数开到上限时最后一个人也要加得进去
+  context "when the activity is as big as chat allows" do
+    before do
+      SiteSetting.chat_max_direct_message_users = 4
+      activity.update!(capacity: 4)
+    end
+
+    it "gets everyone into the chat" do
+      users =
+        Array.new(3) { Fabricate(:user, trust_level: TrustLevel[1], refresh_auto_groups: true) }
+      deliveries =
+        users.map do |user|
+          pending = Fabricate(:kuu_buddy_application, activity:, user:)
+          described_class.call(
+            params: {
+              topic_id: topic.id,
+              application_id: pending.id,
+            },
+            **dependencies,
+          ).chat_delivery
+        end
+
+      expect(deliveries).to all(eq(:joined))
+      expect(chat_user_ids).to contain_exactly(organizer.id, *users.map(&:id))
+      expect(activity.reload.status).to eq("started")
+    end
+  end
+
   context "when the person does not accept direct messages" do
     before { applicant.user_option.update!(allow_private_messages: false) }
 
