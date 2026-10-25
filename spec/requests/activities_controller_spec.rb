@@ -145,6 +145,29 @@ RSpec.describe DiscourseKuuBuddy::ActivitiesController do
         "requirements" => "会打日麻",
         "capacity" => 4,
         "member_count" => 1,
+        "members" => [include("username" => author.username)],
+      )
+    end
+
+    it "puts the organizer first, then the members, without extra queries per topic" do
+      member = Fabricate(:kuu_buddy_member, activity:).user
+      get "/c/#{category.slug}/#{category.id}.json"
+
+      other = Fabricate(:kuu_buddy_activity, topic: Fabricate(:topic_with_op, category:))
+      2.times { Fabricate(:kuu_buddy_member, activity: other) }
+      queries = track_sql_queries { get "/c/#{category.slug}/#{category.id}.json" }
+      initial = queries.count { it.include?("kuu_buddy") }
+
+      3.times do
+        extra = Fabricate(:kuu_buddy_activity, topic: Fabricate(:topic_with_op, category:))
+        Fabricate(:kuu_buddy_member, activity: extra)
+      end
+      queries = track_sql_queries { get "/c/#{category.slug}/#{category.id}.json" }
+
+      expect(queries.count { it.include?("kuu_buddy") }).to eq(initial)
+      item = response.parsed_body["topic_list"]["topics"].find { it["id"] == topic.id }
+      expect(item["kuu_buddy_card"]["members"].map { it["username"] }).to eq(
+        [author.username, member.username],
       )
     end
 

@@ -7,6 +7,9 @@ import { i18n } from "discourse-i18n";
 // 插件自己的站内通知（core 的 custom 类型）：data.message 是 server 端的 key，
 // 显示用这里的图标和 js 文案，文案里的 %{username} 是 data.display_username
 export const NOTIFICATIONS = {
+  "kuu_buddy.notifications.applied": { key: "applied", icon: "user-plus" },
+  "kuu_buddy.notifications.accepted": { key: "accepted", icon: "user-group" },
+  "kuu_buddy.notifications.declined": { key: "declined", icon: "user-group" },
   "kuu_buddy.notifications.expired": {
     key: "expired",
     icon: "clock-rotate-left",

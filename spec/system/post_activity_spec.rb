@@ -76,7 +76,10 @@ RSpec.describe "Posting and managing a buddy topic" do
       expect(page).to have_css(".kuu-buddy-panel .kuu-buddy-status--started", text: "活动开始！")
 
       find(".kuu-buddy-actions__change[data-status='ended']").click
-      dialog.click_yes
+      # 没有群聊时不问保不保留
+      expect(page).to have_css(".kuu-buddy-end-modal")
+      expect(page).to have_no_css(".kuu-buddy-end-modal__chat")
+      find(".kuu-buddy-end-modal__confirm").click
       expect(page).to have_css(".kuu-buddy-panel .kuu-buddy-status--ended", text: "已结束")
       expect(page).to have_no_css(".kuu-buddy-actions__change")
       expect(activity.reload.status).to eq("ended")

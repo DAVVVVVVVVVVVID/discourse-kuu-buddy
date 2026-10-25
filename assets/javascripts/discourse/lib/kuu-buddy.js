@@ -5,9 +5,10 @@ export const REQUIREMENTS_MAX_LENGTH = 100;
 export const DESCRIPTION_MAX_LENGTH = 2000;
 export const MIN_CAPACITY = 2;
 export const DEFAULT_CAPACITY = 4;
+export const APPLICATION_MESSAGE_MAX_LENGTH = 100;
 
 // 界面 1 顶部的三个筛选，值写在网址的 kuu_buddy 里
-export const LIST_FILTERS = ["recruiting", "mine"];
+export const LIST_FILTERS = ["recruiting", "mine", "joined"];
 
 export function buddyCategoryId(siteSettings) {
   return parseInt(siteSettings.kuu_buddy_category, 10) || null;

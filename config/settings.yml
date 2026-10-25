@@ -10,3 +10,7 @@ discourse_kuu_buddy:
     default: 30
     min: 1
     max: 365
+  kuu_buddy_application_actions_per_day:
+    default: 5
+    min: 1
+    max: 100

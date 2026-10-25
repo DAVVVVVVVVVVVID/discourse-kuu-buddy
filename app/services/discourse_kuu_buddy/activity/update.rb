@@ -2,7 +2,8 @@
 
 module DiscourseKuuBuddy
   # 发起人或管理员用表单修改搭子帖，不受编辑时限限制。标题和第一楼按表单重新生成，
-  # 照常留下编辑记录；不顶帖，也不重新计算过期时间
+  # 照常留下编辑记录；不顶帖，也不重新计算过期时间。改人数以后人满了自动开始，
+  # 人满自动开始的改多了人数回到招募中
   class Activity::Update
     include Service::Base
 
@@ -27,7 +28,10 @@ module DiscourseKuuBuddy
     end
 
     def revise_activity(activity:, params:)
-      activity.tap { it.assign_attributes(params.activity_attributes) }
+      activity.tap do
+        it.assign_attributes(params.activity_attributes)
+        it.follow_member_count
+      end
     end
 
     def revise_first_post(guardian:, revised_activity:)

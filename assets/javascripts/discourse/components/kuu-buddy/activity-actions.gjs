@@ -9,6 +9,7 @@ import { eq } from "discourse/truth-helpers";
 import DButton from "discourse/ui-kit/d-button";
 import { i18n } from "discourse-i18n";
 import ActivityForm from "./modal/activity-form.gjs";
+import EndActivity from "./modal/end-activity.gjs";
 
 const STATUS_ICONS = {
   started: "user-group",
@@ -16,7 +17,7 @@ const STATUS_ICONS = {
   recruiting: "rotate-left",
 };
 
-// 发起人和管理员的按钮（界面 5、6）：修改、开始活动、活动结束、过期后重新开放
+// 发起人和管理员的按钮（界面 5、6）：修改、打开群聊、开始活动、活动结束、过期后重新开放
 export default class ActivityActions extends Component {
   @service dialog;
   @service modal;
@@ -43,21 +44,24 @@ export default class ActivityActions extends Component {
     return `kuu_buddy.actions.change_to.${status}`;
   }
 
+  // 活动结束要问群聊保不保留（界面 7），单独一个弹窗
   @action
   changeStatus(status) {
-    const confirmKey = {
-      started: "kuu_buddy.actions.confirm_start",
-      ended: "kuu_buddy.actions.confirm_end",
-    }[status];
-
-    if (confirmKey) {
+    if (status === "ended") {
+      this.modal.show(EndActivity, { model: { activity: this.activity } });
+    } else if (status === "started") {
       this.dialog.yesNoConfirm({
-        message: i18n(confirmKey),
+        message: i18n("kuu_buddy.actions.confirm_start"),
         didConfirm: () => this.#saveStatus(status),
       });
     } else {
       this.#saveStatus(status);
     }
+  }
+
+  @action
+  openChat() {
+    this.router.transitionTo("chat.channel", "-", this.activity.chat.id);
   }
 
   @action
@@ -96,7 +100,14 @@ export default class ActivityActions extends Component {
         @icon="pencil"
         @label="kuu_buddy.actions.edit"
       />
-      {{yield}}
+      {{#if this.activity.chat}}
+        <DButton
+          class="btn-default kuu-buddy-actions__chat"
+          @action={{this.openChat}}
+          @icon="comments"
+          @label="kuu_buddy.actions.open_chat"
+        />
+      {{/if}}
       {{#each this.activity.statuses_reachable as |status|}}
         <DButton
           class="kuu-buddy-actions__change

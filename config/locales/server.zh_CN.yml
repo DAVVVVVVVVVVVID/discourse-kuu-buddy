@@ -3,12 +3,20 @@ zh_CN:
     kuu_buddy_enabled: "启用 KUU 搭子广场（找搭子表单、申请加入、自动建群聊）。"
     kuu_buddy_category: "搭子广场分类。在这个分类里只能用插件的表单发新帖（管理员除外），回复不受影响。"
     kuu_buddy_expire_days: "搭子帖招募中满多少天还没开始，自动过期。"
+    kuu_buddy_application_actions_per_day: "同一个帖子每人每天最多申请 / 撤回几次（合计），日本时间每天 0 点清零。每次申请都会通知发起人，用来防刷。"
   kuu_buddy:
     errors:
       use_buddy_form: "搭子广场的帖子请在搭子广场分类里点「新建话题」，用找搭子表单发布。"
       edit_with_buddy_form: "搭子帖的标题和第一楼由表单生成，请用帖子上的「修改」按钮修改。"
       cannot_manage: "只有发起人和管理员可以修改这个帖子。"
       status_unreachable: "这个帖子不能切换到这个状态。"
+      already_applied: "你已经申请过了，等发起人确认吧。"
+      cannot_apply_again: "这次没能加入，这个帖子不能再申请了，下次再约～"
+      too_many_application_actions: "反复申请会打扰到发起人哦，请明天再试吧！"
+      no_spot: "人数已满或活动已经开始，不能再接受申请了。"
+      activity_ended: "活动已经结束了。"
+    chat:
+      welcome: "「%{title}」的群聊建好啦！帖子在这里：%{url}"
     activity:
       field_line: "- **%{label}**：%{value}"
       fields:

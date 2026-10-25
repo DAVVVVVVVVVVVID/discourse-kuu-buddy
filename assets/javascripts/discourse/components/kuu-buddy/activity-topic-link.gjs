@@ -1,10 +1,11 @@
 import Component from "@glimmer/component";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
+import dAvatar from "discourse/ui-kit/helpers/d-avatar";
 import { i18n } from "discourse-i18n";
 
 // 包在 core 话题列表标题（topic-list/topic-link）外面：搭子帖的标题链接画成卡片（界面 1）：
-// 标题、状态标签、时间和条件两行、人数。其他帖子直接交回 core 的渲染（yield）。
+// 标题、状态标签、时间和条件两行、成员头像叠放 + 虚线空位、人数。其他帖子直接交回 core 的渲染（yield）。
 // core 的两处调用都传了 raw-topic-link 类名和 focus / blur 处理，这里照抄，键盘浏览列表时的高亮才不会丢
 export default class ActivityTopicLink extends Component {
   get topic() {
@@ -31,6 +32,19 @@ export default class ActivityTopicLink extends Component {
     return i18n("kuu_buddy.card.count", {
       count: this.card.member_count,
       capacity: this.card.capacity,
+    });
+  }
+
+  get members() {
+    return this.card.members ?? [];
+  }
+
+  get emptySlots() {
+    if (this.card.status !== "recruiting") {
+      return [];
+    }
+    return Array.from({
+      length: Math.max(this.card.capacity - this.card.member_count, 0),
     });
   }
 
@@ -87,6 +101,16 @@ export default class ActivityTopicLink extends Component {
           {{this.requirements}}
         </span>
         <span class="kuu-buddy-card__footer">
+          <span class="kuu-buddy-card__avatars">
+            {{#each this.members as |member|}}
+              <span class="kuu-buddy-card__avatar">
+                {{dAvatar member imageSize="tiny"}}
+              </span>
+            {{/each}}
+            {{#each this.emptySlots}}
+              <span class="kuu-buddy-card__slot"></span>
+            {{/each}}
+          </span>
           <span class="kuu-buddy-card__count">{{this.countLabel}}</span>
           {{#if this.spotsLabel}}
             <span class="kuu-buddy-card__spots">{{this.spotsLabel}}</span>

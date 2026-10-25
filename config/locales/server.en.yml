@@ -3,12 +3,20 @@ en:
     kuu_buddy_enabled: "Enable the KUU buddy board (find-a-buddy form, join requests, automatic group chats)."
     kuu_buddy_category: "The buddy board category. New topics here can only be posted with the plugin's form (staff excepted); replies are unaffected."
     kuu_buddy_expire_days: "Days a buddy topic can stay recruiting without starting before it expires."
+    kuu_buddy_application_actions_per_day: "How many times a day each person can send or withdraw a request on the same topic (combined). Resets at midnight Japan time. Each request notifies the organizer."
   kuu_buddy:
     errors:
       use_buddy_form: "Please post buddy topics with the find-a-buddy form: click “New Topic” in the buddy board category."
       edit_with_buddy_form: "The title and first post of a buddy topic come from its form. Please use the “Edit” button on the topic."
       cannot_manage: "Only the organizer and staff can change this topic."
       status_unreachable: "This topic can’t be changed to that status."
+      already_applied: "You’ve already sent a request. Wait for the organizer to reply."
+      cannot_apply_again: "This one didn’t work out, and you can’t ask to join it again. Maybe next time!"
+      too_many_application_actions: "Sending requests over and over bothers the organizer. Please try again tomorrow!"
+      no_spot: "It’s full or already underway, so no more requests can be accepted."
+      activity_ended: "The activity has already ended."
+    chat:
+      welcome: "The group chat for “%{title}” is ready! Here’s the topic: %{url}"
     activity:
       field_line: "- **%{label}**: %{value}"
       fields:

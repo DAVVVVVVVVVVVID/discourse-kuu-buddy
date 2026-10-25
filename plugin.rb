@@ -15,6 +15,10 @@ register_svg_icon "user-group"
 register_svg_icon "clock-rotate-left"
 register_svg_icon "flag-checkered"
 register_svg_icon "rotate-left"
+register_svg_icon "user-plus"
+register_svg_icon "user-xmark"
+register_svg_icon "comments"
+register_svg_icon "ellipsis"
 
 module ::DiscourseKuuBuddy
   PLUGIN_NAME = "discourse-kuu-buddy"
@@ -40,7 +44,10 @@ after_initialize do
     kuu_buddy_activity if DiscourseKuuBuddy.buddy_category?(category_id)
   end
 
-  register_topic_preloader_associations(:kuu_buddy_activity) { SiteSetting.kuu_buddy_enabled }
+  # 列表卡片要画成员头像
+  register_topic_preloader_associations(
+    { kuu_buddy_activity: [{ members: :user }, { topic: :user }] },
+  ) { SiteSetting.kuu_buddy_enabled }
 
   # 已结束的帖子是隐藏话题，列表和搜索里都没有；但发起人主页的「话题」里所有人都能看到（Issue #1）。
   # 只在这个列表、只在 core 按 visible 过滤了的时候把它们加回来，过期的不加
@@ -58,6 +65,15 @@ after_initialize do
     return true if is_staff?
 
     topic.user_id == user.id && !user.silenced?
+  end
+
+  # 招募中、还有空位的帖子，发起人以外的登录用户可以申请（包括管理员）
+  add_to_class(:guardian, :can_apply_to_kuu_buddy_activity?) do |activity|
+    return false if anonymous? || user.silenced?
+    return false if activity.topic_deleted? || !activity.in_category?
+    return false if !activity.accepting_applications?
+
+    activity.topic.user_id != user.id && can_see?(activity.topic)
   end
 
   add_to_serializer(
@@ -86,6 +102,11 @@ after_initialize do
       requirements: activity.requirements,
       capacity: activity.capacity,
       member_count: activity.member_count,
+      # 发起人在最前面，然后按加入顺序
+      members:
+        [activity.organizer, *activity.members.map(&:user)].compact.map do |user|
+          BasicUserSerializer.new(user, root: false).as_json
+        end,
     }
   end
 
@@ -124,4 +145,13 @@ after_initialize do
   end
 
   add_model_callback(:post, :validate) { DiscourseKuuBuddy::EditRules.check_post(self) }
+
+  # 有人在 chat 里自己离开了活动的群聊，同步到帖子上（见 SyncChatLeave）。
+  # 多人私聊里离开会删掉群聊成员记录；在事务提交后排后台任务，不拖慢 chat
+  add_model_callback(Chat::UserChatChannelMembership, :after_commit, on: :destroy) do
+    if SiteSetting.kuu_buddy_enabled &&
+         DiscourseKuuBuddy::Activity.managing_chat(chat_channel_id).exists?
+      Jobs.enqueue(Jobs::KuuBuddySyncChatLeave, channel_id: chat_channel_id, user_id:)
+    end
+  end
 end

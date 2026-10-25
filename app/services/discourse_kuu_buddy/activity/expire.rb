@@ -6,8 +6,6 @@ module DiscourseKuuBuddy
   class Activity::Expire
     include Service::Base
 
-    NOTIFICATION_MESSAGE = "kuu_buddy.notifications.expired"
-
     params do
       attribute :topic_id, :integer
 
@@ -58,14 +56,7 @@ module DiscourseKuuBuddy
     end
 
     def notify_author(activity:)
-      topic = activity.topic
-      Notification.create!(
-        notification_type: Notification.types[:custom],
-        user_id: topic.user_id,
-        topic_id: topic.id,
-        post_number: 1,
-        data: { message: NOTIFICATION_MESSAGE, topic_title: topic.title }.to_json,
-      )
+      Activity::Action::Notify.call(activity:, user: activity.organizer, message: "expired")
     end
 
     def publish_changes(activity:)

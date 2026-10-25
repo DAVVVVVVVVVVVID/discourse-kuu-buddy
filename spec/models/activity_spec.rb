@@ -127,4 +127,53 @@ RSpec.describe DiscourseKuuBuddy::Activity do
       expect(described_class.due_to_expire).not_to include(activity, other)
     end
   end
+  describe "members and fullness" do
+    fab!(:activity) { Fabricate(:kuu_buddy_activity, capacity: 3) }
+
+    def add_member
+      Fabricate(:kuu_buddy_member, activity:)
+      activity.members.reset
+    end
+
+    it "counts the organizer" do
+      expect(activity.member_count).to eq(1)
+      add_member
+      expect(activity.member_count).to eq(2)
+    end
+
+    it "ignores pending and former members" do
+      Fabricate(:kuu_buddy_application, activity:)
+      Fabricate(:kuu_buddy_application, activity:, status: "left")
+
+      expect(activity.member_count).to eq(1)
+    end
+
+    it "starts by itself when full, and recruits again when someone leaves" do
+      2.times { add_member }
+
+      expect(activity.follow_member_count).to eq(true)
+      expect(activity).to have_attributes(status: "started", start_reason: "full")
+
+      activity.members.first.update!(status: "left")
+      activity.members.reset
+
+      expect(activity.follow_member_count).to eq(true)
+      expect(activity).to have_attributes(status: "recruiting", start_reason: nil)
+    end
+
+    it "stays started when the organizer started it by hand" do
+      activity.change_status("started")
+
+      expect(activity.follow_member_count).to eq(false)
+      expect(activity).to be_started
+    end
+
+    it "does not let the capacity drop below the members" do
+      2.times { add_member }
+      activity.capacity = 2
+
+      expect(activity).not_to be_valid
+      expect(activity.errors[:capacity]).to be_present
+    end
+  end
 end

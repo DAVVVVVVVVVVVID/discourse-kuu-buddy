@@ -23,7 +23,7 @@ module DiscourseKuuBuddy
     HIDDEN_STATUSES = %w[ended expired].freeze
 
     # 网址里的 kuu_buddy（界面 1 顶部的筛选）
-    LIST_FILTERS = %w[recruiting mine].freeze
+    LIST_FILTERS = %w[recruiting mine joined].freeze
 
     enum :status,
          { recruiting: "recruiting", started: "started", ended: "ended", expired: "expired" },
@@ -38,6 +38,11 @@ module DiscourseKuuBuddy
 
     # 表单内容在话题建出来之前就要校验，所以这里不要求 topic；数据库里 topic_id 不能为空
     belongs_to :topic, -> { with_deleted }, optional: true
+    has_many :applications, dependent: :delete_all
+    # 已加入的成员（不含发起人），按加入顺序
+    has_many :members,
+             -> { accepted.order(:decided_at, :id) },
+             class_name: "DiscourseKuuBuddy::Application"
 
     validates :topic_id, uniqueness: { allow_nil: true }
     validates :title, presence: true, length: { maximum: TITLE_MAX_LENGTH }
@@ -53,6 +58,7 @@ module DiscourseKuuBuddy
                 less_than_or_equal_to: ->(_) { max_capacity },
               },
               if: :will_save_change_to_capacity?
+    validate :capacity_fits_members, if: :will_save_change_to_capacity?
 
     # chat 的多人私聊最多 chat_max_direct_message_users 人（含发起人），见 Issue #1
     def self.max_capacity
@@ -86,6 +92,11 @@ module DiscourseKuuBuddy
       )
     end
 
+    # 群聊建好以后由插件管理，直到活动结束（结束时保留的群聊变成普通群聊）
+    def self.managing_chat(channel_id)
+      where(chat_channel_id: channel_id).where.not(status: "ended")
+    end
+
     def self.ended_by_plugin
       ended
         .where(unlisted_by_plugin: true)
@@ -94,7 +105,8 @@ module DiscourseKuuBuddy
     end
 
     # 「招募中」只去掉不在招募的搭子帖，分类里的规则帖等照常显示。
-    # 「我发起的」连自己已结束、过期的帖子一起显示（它们是隐藏话题，平时列表里没有）
+    # 「我发起的」连自己已结束、过期的帖子一起显示（它们是隐藏话题，平时列表里没有）；
+    # 「我参加的」是现在还是成员的帖子，已结束的也算
     def self.filter_list(topics, filter, user:)
       case filter
       when "recruiting"
@@ -104,14 +116,47 @@ module DiscourseKuuBuddy
 
         mine = joins(:topic).where(topics: { user_id: user.id }).select(:topic_id)
         topics.unscope(where: :visible).where(id: mine)
+      when "joined"
+        return topics if user.nil?
+
+        joined = joins(:applications).merge(Application.accepted.where(user:)).select(:topic_id)
+        topics
+          .unscope(where: :visible)
+          .where(id: joined)
+          .where("topics.visible OR topics.id IN (?)", ended_by_plugin.select(:topic_id))
       else
         topics
       end
     end
 
-    # 发起人算一个人；接受的成员在第二期加上
+    # 发起人也算一个人
     def member_count
-      1
+      members.size + 1
+    end
+
+    def full?
+      member_count >= capacity
+    end
+
+    # 招募中人满了自动开始；人满自动开始的，人数不满时回到招募中（发起人手动开始的不会）。
+    # 返回状态有没有变
+    def follow_member_count(at: Time.zone.now)
+      if recruiting? && full?
+        change_status("started", reason: "full", at:)
+      elsif started? && started_when_full? && !full?
+        change_status("recruiting", at:)
+      else
+        return false
+      end
+      true
+    end
+
+    def accepting_applications?
+      recruiting? && !full?
+    end
+
+    def organizer
+      topic&.user
     end
 
     def spots_left
@@ -165,6 +210,19 @@ module DiscourseKuuBuddy
     def in_category?
       DiscourseKuuBuddy.buddy_category?(topic&.category_id)
     end
+
+    def chat_channel
+      Chat::Channel.find_by(id: chat_channel_id) if chat_channel_id
+    end
+
+    private
+
+    # 修改时人数不能少于已经加入的人
+    def capacity_fits_members
+      return if capacity.nil? || capacity >= member_count
+
+      errors.add(:capacity, :greater_than_or_equal_to, count: member_count)
+    end
   end
 end
 
@@ -174,6 +232,7 @@ end
 #
 #  id                 :bigint           not null, primary key
 #  capacity           :integer          not null
+#  chat_closed        :boolean          default(FALSE), not null
 #  description        :text             default(""), not null
 #  ended_at           :datetime
 #  recruiting_since   :datetime         not null
@@ -186,10 +245,12 @@ end
 #  unlisted_by_plugin :boolean          default(FALSE), not null
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
+#  chat_channel_id    :bigint
 #  topic_id           :integer          not null
 #
 # Indexes
 #
+#  index_kuu_buddy_activities_on_chat_channel_id              (chat_channel_id) UNIQUE
 #  index_kuu_buddy_activities_on_status_and_recruiting_since  (status,recruiting_since)
 #  index_kuu_buddy_activities_on_topic_id                     (topic_id) UNIQUE
 #

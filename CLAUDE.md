@@ -28,6 +28,14 @@
 - 列表筛选（`kuu_buddy` 参数）：「招募中」「我发起的」，都不选时显示全部（招募中 + 活动开始）。「我发起的」连自己已结束、过期的一起显示
 - 第一楼正文和帖子上方的面板内容一样，插件开着时由 CSS 藏起来（`post-class` 加 `kuu-buddy-first-post`）
 - custom 类型的站内通知只能登记一种显示，二手插件也登记了。本插件等第一次换页时在当时登记的显示上再包一层（`lib/kuu-buddy-notifications.js`），不会覆盖二手的
+- 申请和成员是同一张表 `kuu_buddy_applications`：pending / withdrawn / declined / accepted（成员）/ left（自己退出，可以再申请）/ removed（被移出，不能再申请）
+- 群聊（PR #3 起）：
+  - 建群、加人都以**发起人的身份**调 chat 的服务（`Chat::CreateDirectMessageChannel`、`Chat::AddUsersToChannel`），chat 的权限检查照常；对方关了私聊、屏蔽了发起人、关了聊天时照样成为成员，帖子上提示发起人
+  - 群里第一条消息是帖子链接，以发起人的身份发（系统账号在多人私聊里发言会被加进群）。chat 自己加人时会以系统账号发「某某邀请了某某」，系统账号因此也在群里（chat 的行为，人数上限算上它刚好是 20）
+  - 成员自己退出：以成员的身份 `Chat::LeaveChannel`；被移出：chat 只允许管理员移出多人私聊的成员，由系统账号 `Chat::RemoveUserFromChannel`
+  - 在 chat 里自己离开群聊：群聊成员记录被删时（`Chat::UserChatChannelMembership` 的 after_commit）排后台任务 `KuuBuddySyncChatLeave`，成员当作退出；**发起人**离开的话插件忘掉这个群，下次接受时重新建
+  - 活动结束时「关闭群聊」：系统账号 `Chat::UpdateChannelStatus` 改成 `closed`（大家还能看记录，不能发消息）。没选归档（chat 的归档是把消息搬进话题，只给公开频道用）、也没选删除频道（聊天记录就没了）
+  - 活动结束以后插件不再管群聊：不再同步退出，帖子上也不能退出 / 移出
 
 ## 「新建话题」按钮
 - 由插件 `discourse-kuu-new-topic` 统一处理，本插件**不要**自己注册 `create-topic-button-click` / `can-create-topic-button`，只向它登记类型（`kuu-buddy-activity`）：在搭子广场分类里直接打开表单，其他地方出现在选择框里（「找搭子」）

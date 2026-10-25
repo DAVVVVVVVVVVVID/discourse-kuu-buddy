@@ -49,11 +49,56 @@
   background: var(--kuu-buddy-cream);
   color: var(--kuu-buddy-navy);
 
-  &__status {
+  &__banner {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-2);
+  }
+
+  // 人满 / 活动开始：顶部藏青横幅（界面 6）
+  &--started &__banner {
+    margin: calc(var(--space-4) * -1) calc(var(--space-4) * -1) 0;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--d-border-radius-large, 12px)
+      var(--d-border-radius-large, 12px) 0 0;
+    background: var(--kuu-buddy-navy);
+    color: #fff;
+
+    .kuu-buddy-status--started {
+      padding: 0;
+      background: transparent;
+      font-size: var(--font-up-1);
+    }
+  }
+
+  &__organizer {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  &__organizer-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__organizer-name {
+    font-weight: 600;
+  }
+
+  &__organizer-meta {
+    font-size: var(--font-down-1);
+    color: var(--primary-medium);
+  }
+
+  &__chat-warning {
+    margin: 0;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--d-border-radius);
+    background: var(--danger-low);
+    color: var(--danger);
+    font-size: var(--font-down-1);
   }
 
   &__status-detail {
@@ -232,5 +277,300 @@
 
   &__submit.btn-primary {
     background: var(--kuu-buddy-sakura);
+  }
+}
+
+// 已加入的成员（界面 3、5、6）：发起人标注，后面是虚线空位
+.kuu-buddy-members {
+  &__title {
+    margin-bottom: var(--space-2);
+    font-weight: 600;
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+
+    &.--out-of-chat .kuu-buddy-members__avatar img {
+      opacity: 0.5;
+    }
+  }
+
+  &__badge {
+    padding: 0 0.4em;
+    border-radius: 999px;
+    background: var(--kuu-buddy-sakura);
+    color: #fff;
+    font-size: var(--font-down-2);
+  }
+
+  &__menu {
+    position: absolute;
+    top: -0.5em;
+    right: -0.9em;
+  }
+
+  &__slot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border: 2px dashed var(--kuu-buddy-mist);
+    border-radius: 50%;
+    color: var(--kuu-buddy-mist);
+  }
+}
+
+// 发起人处理申请（界面 5）
+.kuu-buddy-applications {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+
+  &__header {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+  }
+
+  &__title {
+    font-weight: 600;
+  }
+
+  &__private {
+    font-size: var(--font-down-1);
+    color: var(--primary-medium);
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__item {
+    display: flex;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    border-radius: var(--d-border-radius);
+    background: var(--secondary);
+  }
+
+  &__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--space-1);
+    min-width: 0;
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  &__name {
+    font-weight: 600;
+  }
+
+  &__time {
+    font-size: var(--font-down-1);
+    color: var(--primary-medium);
+  }
+
+  &__message {
+    margin: 0;
+    overflow-wrap: anywhere;
+
+    &.--empty {
+      color: var(--primary-medium);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--space-2);
+  }
+
+  &__accept.btn-primary {
+    background: var(--kuu-buddy-sakura);
+  }
+}
+
+// 其他人底部的「申请加入」（界面 3、4）
+.kuu-buddy-join {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+
+  &:empty {
+    display: none;
+  }
+
+  &__apply.btn-primary {
+    width: 100%;
+    padding: var(--space-3);
+    border-radius: 999px;
+    background: var(--kuu-buddy-sakura);
+    font-size: var(--font-up-1);
+  }
+
+  &__pending,
+  &__member {
+    font-weight: 600;
+  }
+
+  &__barred {
+    color: var(--primary-medium);
+  }
+}
+
+// 群聊卡片（界面 6）
+.kuu-buddy-chat {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--kuu-buddy-mist);
+  border-radius: var(--d-border-radius);
+  background: var(--secondary);
+
+  &__icon {
+    color: var(--kuu-buddy-navy);
+    font-size: var(--font-up-2);
+  }
+
+  &__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &__name {
+    font-weight: 600;
+  }
+
+  &__last {
+    overflow: hidden;
+    color: var(--primary-medium);
+    font-size: var(--font-down-1);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__open.btn-primary {
+    border-radius: 999px;
+    background: var(--kuu-buddy-navy);
+  }
+
+  &.--closed {
+    opacity: 0.7;
+  }
+}
+
+// 列表卡片上的成员头像叠放 + 虚线空位（界面 1）
+.kuu-buddy-card {
+  &__avatars {
+    display: inline-flex;
+    align-items: center;
+
+    > * + * {
+      margin-left: -6px;
+    }
+  }
+
+  &__avatar img {
+    border: 2px solid var(--secondary);
+    border-radius: 50%;
+  }
+
+  &__slot {
+    width: 20px;
+    height: 20px;
+    border: 2px dashed var(--kuu-buddy-mist);
+    border-radius: 50%;
+    background: var(--secondary);
+  }
+}
+
+// 申请加入（界面 4）、活动结束（界面 7）
+.kuu-buddy-apply-modal,
+.kuu-buddy-end-modal {
+  &__tip {
+    margin: var(--space-3) 0 0;
+    color: var(--primary-medium);
+    font-size: var(--font-down-1);
+  }
+
+  &__submit.btn-primary,
+  &__confirm.btn-primary {
+    background: var(--kuu-buddy-sakura);
+  }
+}
+
+.kuu-buddy-end-modal {
+  &__chat {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin: var(--space-3) 0 0;
+    padding: 0;
+    border: 0;
+
+    legend {
+      margin-bottom: var(--space-2);
+      font-weight: 600;
+    }
+  }
+
+  &__choice {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    border: 1px solid var(--primary-low);
+    border-radius: var(--d-border-radius);
+    cursor: pointer;
+
+    &.--selected {
+      border-color: var(--kuu-buddy-navy);
+      background: var(--kuu-buddy-cream);
+    }
+
+    input {
+      margin-top: 0.2em;
+    }
+  }
+
+  &__choice-text {
+    display: flex;
+    flex-direction: column;
+
+    span {
+      color: var(--primary-medium);
+      font-size: var(--font-down-1);
+    }
   }
 }

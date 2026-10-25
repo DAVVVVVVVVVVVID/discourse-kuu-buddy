@@ -116,6 +116,22 @@ RSpec.describe "Who sees buddy topics that are no longer recruiting" do
       expect(topic_ids("#{path}?kuu_buddy=mine")).to be_empty
     end
 
+    it "shows the topics I joined, including ended ones, but not ones I left" do
+      [recruiting, ended].each do |topic|
+        Fabricate(:kuu_buddy_member, activity: topic.kuu_buddy_activity, user: viewer)
+      end
+      Fabricate(
+        :kuu_buddy_application,
+        activity: started.kuu_buddy_activity,
+        user: viewer,
+        status: "left",
+      )
+      Fabricate(:kuu_buddy_application, activity: expired.kuu_buddy_activity, user: viewer)
+      sign_in(viewer)
+
+      expect(topic_ids("#{path}?kuu_buddy=joined")).to contain_exactly(recruiting.id, ended.id)
+    end
+
     it "ignores unknown values" do
       expect(topic_ids("#{path}?kuu_buddy=everything")).to contain_exactly(
         recruiting.id,
