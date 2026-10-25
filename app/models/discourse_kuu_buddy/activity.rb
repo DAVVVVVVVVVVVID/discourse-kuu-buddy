@@ -84,19 +84,12 @@ module DiscourseKuuBuddy
       at - SiteSetting.kuu_buddy_expire_days.days
     end
 
-    # 在按 visible 过滤过的话题列表里，加回插件隐藏的已结束帖子。管理员手动隐藏的仍然不显示
-    def self.with_ended_visible(topics)
-      topics.unscope(where: :visible).where(
-        "topics.visible OR topics.id IN (?)",
-        ended_by_plugin.select(:topic_id),
-      )
-    end
-
     # 群聊建好以后由插件管理，直到活动结束（结束时保留的群聊变成普通群聊）
     def self.managing_chat(channel_id)
       where(chat_channel_id: channel_id).where.not(status: "ended")
     end
 
+    # 插件隐藏的已结束帖子（管理员手动隐藏的不算）：个人主页和「我参加的」里放出来
     def self.ended_by_plugin
       ended
         .where(unlisted_by_plugin: true)

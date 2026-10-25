@@ -27,6 +27,7 @@
 - 招募中不能直接「活动结束」（Issue 的状态流程没有这一步），发起人不办了可以删帖
 - 列表筛选（`kuu_buddy` 参数）：「招募中」「我发起的」，都不选时显示全部（招募中 + 活动开始）。「我发起的」连自己已结束、过期的一起显示
 - 第一楼正文和帖子上方的面板内容一样，插件开着时由 CSS 藏起来（`post-class` 加 `kuu-buddy-first-post`）
+- 个人主页放出隐藏帖：和二手插件共用 `KuuProfileTopics`（plugin.rb 开头那一段，两个插件要保持一样，二手 Issue #19）。各插件往 `SOURCES` 登记自己的来源、各自注册 modifier，条件由 `reveal` 合成一个 OR。**不能只注册一次**：core 只在登记 modifier 的插件开着时才执行它
 - custom 类型的站内通知只能登记一种显示，二手插件也登记了。本插件等第一次换页时在当时登记的显示上再包一层（`lib/kuu-buddy-notifications.js`），不会覆盖二手的
 - 申请和成员是同一张表 `kuu_buddy_applications`：pending / withdrawn / declined / accepted（成员）/ left（自己退出，可以再申请）/ removed（被移出，不能再申请）
 - 群聊（PR #3 起）：
