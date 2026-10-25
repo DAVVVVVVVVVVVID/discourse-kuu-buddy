@@ -3,7 +3,84 @@ en:
     admin:
       site_settings:
         categories:
-          TODO_plugin_name: "Plugin Name"
+          discourse_kuu_buddy: "KUU buddy board"
   js:
-    discourse_plugin_name:
-      placeholder: placeholder
+    kuu_buddy:
+      new_topic:
+        label: "Find a buddy"
+        description: "Find people for mahjong, hiking, a meal…"
+        button: "Find a buddy"
+      statuses:
+        recruiting: "Recruiting"
+        started: "Underway!"
+        started_full: "Full — it’s on!"
+        ended: "Ended"
+        expired: "Expired"
+      card_statuses:
+        recruiting: "Recruiting"
+        started: "Underway"
+        started_full: "Full · underway"
+        ended: "Ended"
+        expired: "Expired"
+      fields:
+        schedule: "When"
+        capacity: "People"
+        requirements: "Who can join"
+        requirements_short: "Who"
+        description: "Details"
+      filters:
+        recruiting: "Recruiting"
+        mine: "Organized by me"
+      card:
+        count: "%{count} / %{capacity}"
+        spots_left:
+          one: "%{count} spot left"
+          other: "%{count} spots left"
+      form:
+        new_title: "Find a buddy"
+        edit_title: "Edit buddy topic"
+        activity: "Activity"
+        activity_placeholder: "e.g. Mahjong on Saturday"
+        capacity: "People (including you)"
+        capacity_hint:
+          one: "Looking for %{count} more person (%{min}–%{max} people)"
+          other: "Looking for %{count} more people (%{min}–%{max} people)"
+        capacity_decrease: "One fewer"
+        capacity_increase: "One more"
+        schedule: "When"
+        schedule_placeholder: "e.g. Around 19:00 this Saturday, any time at the weekend"
+        requirements: "Who can join"
+        requirements_placeholder: "Anyone is welcome"
+        description: "Details"
+        privacy_hint: "Don’t post phone numbers or your address — talk details over in the group chat"
+        chat_tip: "A group chat is created when you accept the first person, and you run it. For a first meeting, pick a public place."
+        publish: "Post"
+        save: "Save"
+        pending_approval: "Submitted. It will appear on the buddy board once approved."
+      panel:
+        spots_left:
+          one: "%{count} spot left"
+          other: "%{count} spots left"
+        started_detail: "%{count} / %{capacity} · not accepting new requests"
+        ended_detail: "%{count} took part · ended %{date}"
+        capacity:
+          one: "%{count} person (including the organizer)"
+          other: "%{count} people (including the organizer)"
+        no_requirements: "Anyone is welcome"
+        safety_tip: "For a first meeting, pick a public place"
+        expires_on: "Expires on %{date} if it hasn’t started"
+      actions:
+        edit: "Edit"
+        change_to:
+          started: "Start"
+          ended: "End"
+          recruiting: "Reopen"
+        confirm_start: "Start the activity now? New requests won’t be accepted after this."
+        confirm_end: "Has the activity ended? The topic will leave the buddy board lists but stay on your profile."
+        changed:
+          started: "It’s on!"
+          ended: "The activity has ended."
+          recruiting: "Recruiting again."
+      notifications:
+        expired: "Your buddy topic expired before it started"
+        expired_title: "Buddy topic expired"

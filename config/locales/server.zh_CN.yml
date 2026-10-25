@@ -1,0 +1,21 @@
+zh_CN:
+  site_settings:
+    kuu_buddy_enabled: "启用 KUU 搭子广场（找搭子表单、申请加入、自动建群聊）。"
+    kuu_buddy_category: "搭子广场分类。在这个分类里只能用插件的表单发新帖（管理员除外），回复不受影响。"
+    kuu_buddy_expire_days: "搭子帖招募中满多少天还没开始，自动过期。"
+  kuu_buddy:
+    errors:
+      use_buddy_form: "搭子广场的帖子请在搭子广场分类里点「新建话题」，用找搭子表单发布。"
+      edit_with_buddy_form: "搭子帖的标题和第一楼由表单生成，请用帖子上的「修改」按钮修改。"
+      cannot_manage: "只有发起人和管理员可以修改这个帖子。"
+      status_unreachable: "这个帖子不能切换到这个状态。"
+    activity:
+      field_line: "- **%{label}**：%{value}"
+      fields:
+        schedule: "时间"
+        capacity: "人数"
+        requirements: "参加条件"
+      capacity:
+        one: "%{count} 人（含发起人）"
+        other: "%{count} 人（含发起人）"
+      no_requirements: "无条件，欢迎所有人"

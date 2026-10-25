@@ -1,4 +1,12 @@
-TODO_plugin_name:
-  plugin_name_enabled:
+discourse_kuu_buddy:
+  kuu_buddy_enabled:
     default: false
     client: true
+  kuu_buddy_category:
+    type: category
+    default: ""
+    client: true
+  kuu_buddy_expire_days:
+    default: 30
+    min: 1
+    max: 365

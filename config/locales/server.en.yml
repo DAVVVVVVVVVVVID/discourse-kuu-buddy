@@ -1,1 +1,21 @@
 en:
+  site_settings:
+    kuu_buddy_enabled: "Enable the KUU buddy board (find-a-buddy form, join requests, automatic group chats)."
+    kuu_buddy_category: "The buddy board category. New topics here can only be posted with the plugin's form (staff excepted); replies are unaffected."
+    kuu_buddy_expire_days: "Days a buddy topic can stay recruiting without starting before it expires."
+  kuu_buddy:
+    errors:
+      use_buddy_form: "Please post buddy topics with the find-a-buddy form: click “New Topic” in the buddy board category."
+      edit_with_buddy_form: "The title and first post of a buddy topic come from its form. Please use the “Edit” button on the topic."
+      cannot_manage: "Only the organizer and staff can change this topic."
+      status_unreachable: "This topic can’t be changed to that status."
+    activity:
+      field_line: "- **%{label}**: %{value}"
+      fields:
+        schedule: "When"
+        capacity: "People"
+        requirements: "Who can join"
+      capacity:
+        one: "%{count} person (including the organizer)"
+        other: "%{count} people (including the organizer)"
+      no_requirements: "Anyone is welcome"
