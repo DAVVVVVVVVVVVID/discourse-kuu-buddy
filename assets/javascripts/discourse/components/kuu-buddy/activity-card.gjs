@@ -1,27 +1,18 @@
 import Component from "@glimmer/component";
-import { on } from "@ember/modifier";
-import { action } from "@ember/object";
 import dAvatar from "discourse/ui-kit/helpers/d-avatar";
 import { i18n } from "discourse-i18n";
+import { spotsLeft } from "../../lib/kuu-buddy-card.js";
 
-// 包在 core 话题列表标题（topic-list/topic-link）外面：搭子帖的标题链接画成卡片（界面 1）：
-// 标题、状态标签、时间和条件两行、成员头像叠放 + 虚线空位、人数。其他帖子直接交回 core 的渲染（yield）。
-// core 的两处调用都传了 raw-topic-link 类名和 focus / blur 处理，这里照抄，键盘浏览列表时的高亮才不会丢
-export default class ActivityTopicLink extends Component {
+// 列表里搭子帖标题下方的卡片内容（界面 1）：时间和条件两行、成员头像叠放 + 虚线空位、人数。
+// 标题用 core 自己的链接；这里挂在 topic-list-main-link-bottom，不占包裹型的 topic-link（Issue #6）。
+// 整块是指向帖子的链接，手机上点哪里都能进帖子
+export default class ActivityCard extends Component {
   get topic() {
     return this.args.outletArgs.topic;
   }
 
   get card() {
     return this.topic.kuu_buddy_card;
-  }
-
-  get statusLabel() {
-    const { status, start_reason } = this.card;
-    if (status === "started" && start_reason === "full") {
-      return i18n("kuu_buddy.card_statuses.started_full");
-    }
-    return i18n(`kuu_buddy.card_statuses.${status}`);
   }
 
   get requirements() {
@@ -39,22 +30,20 @@ export default class ActivityTopicLink extends Component {
     return this.card.members ?? [];
   }
 
+  get isRecruiting() {
+    return this.card.status === "recruiting";
+  }
+
   get emptySlots() {
-    if (this.card.status !== "recruiting") {
-      return [];
-    }
-    return Array.from({
-      length: Math.max(this.card.capacity - this.card.member_count, 0),
-    });
+    return this.isRecruiting
+      ? Array.from({ length: spotsLeft(this.card) })
+      : [];
   }
 
   get spotsLabel() {
-    if (this.card.status !== "recruiting") {
-      return null;
-    }
-    return i18n("kuu_buddy.card.spots_left", {
-      count: Math.max(this.card.capacity - this.card.member_count, 0),
-    });
+    return this.isRecruiting
+      ? i18n("kuu_buddy.card.spots_left", { count: spotsLeft(this.card) })
+      : null;
   }
 
   get url() {
@@ -63,31 +52,14 @@ export default class ActivityTopicLink extends Component {
       : this.topic.lastUnreadUrl;
   }
 
-  @action
-  highlightItem(event) {
-    event.target.closest(".topic-list-item")?.classList.add("selected");
-  }
-
-  @action
-  unhighlightItem(event) {
-    event.target.closest(".topic-list-item")?.classList.remove("selected");
-  }
-
   <template>
-    {{~#if this.card~}}
+    {{#if this.card}}
       <a
-        class="title raw-link raw-topic-link kuu-buddy-card"
+        class="kuu-buddy-card"
         data-topic-id={{this.topic.id}}
         href={{this.url}}
-        {{on "focus" this.highlightItem}}
-        {{on "blur" this.unhighlightItem}}
+        tabindex="-1"
       >
-        <span class="kuu-buddy-card__header">
-          <span class="kuu-buddy-card__title">{{this.topic.title}}</span>
-          <span class="kuu-buddy-status kuu-buddy-status--{{this.card.status}}">
-            {{this.statusLabel}}
-          </span>
-        </span>
         <span class="kuu-buddy-card__line" data-field="schedule">
           <span class="kuu-buddy-card__label">
             {{i18n "kuu_buddy.fields.schedule"}}
@@ -116,12 +88,7 @@ export default class ActivityTopicLink extends Component {
             <span class="kuu-buddy-card__spots">{{this.spotsLabel}}</span>
           {{/if}}
         </span>
-        {{~#if this.topic.visited~}}
-          <span class="sr-only">&nbsp;{{i18n "topic.sr_read"}}</span>
-        {{~/if~}}
       </a>
-    {{~else~}}
-      {{yield}}
-    {{~/if~}}
+    {{/if}}
   </template>
 }
