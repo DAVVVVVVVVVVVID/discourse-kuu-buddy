@@ -93,6 +93,7 @@ en:
         organizer: "Organizer"
         menu: "Member actions"
         remove: "Remove %{username}"
+        remove_button: "Remove"
         confirm_remove: "Remove %{username} from the activity? They’ll also be removed from the group chat and can’t ask to join again."
       applications:
         title:

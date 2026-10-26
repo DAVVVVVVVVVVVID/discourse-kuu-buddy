@@ -94,6 +94,7 @@ zh_CN:
         organizer: "发起人"
         menu: "成员操作"
         remove: "移出 %{username}"
+        remove_button: "移出"
         confirm_remove: "要把 %{username} 移出活动吗？对方会同时被移出群聊，也不能再申请这个帖子。"
       applications:
         title:
