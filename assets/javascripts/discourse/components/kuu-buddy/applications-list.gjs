@@ -37,7 +37,8 @@ export default class ApplicationsList extends Component {
 
   @action
   decline(application) {
-    this.dialog.yesNoConfirm({
+    this.dialog.deleteConfirm({
+      confirmButtonLabel: "kuu_buddy.applications.decline",
       message: i18n("kuu_buddy.applications.confirm_decline", {
         username: application.user.username,
       }),

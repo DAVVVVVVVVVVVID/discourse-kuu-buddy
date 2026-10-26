@@ -103,7 +103,8 @@ export default class ActivityPanel extends Component {
 
   @action
   removeMember(member) {
-    this.dialog.yesNoConfirm({
+    this.dialog.deleteConfirm({
+      confirmButtonLabel: "kuu_buddy.members.remove_button",
       message: i18n("kuu_buddy.members.confirm_remove", {
         username: member.username,
       }),

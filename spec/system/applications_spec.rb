@@ -80,6 +80,17 @@ RSpec.describe "Asking to join and managing members" do
       topic_page.visit_topic(topic)
 
       item = find(".kuu-buddy-applications__item[data-application-id='#{application.id}']")
+      # 接受绿色、婉拒红色（Issue #11）
+      expect(
+        item.find(".kuu-buddy-applications__accept").evaluate_script(
+          "getComputedStyle(this).backgroundColor",
+        ),
+      ).to eq("rgb(30, 123, 60)")
+      expect(
+        item.find(".kuu-buddy-applications__decline").evaluate_script(
+          "getComputedStyle(this).backgroundColor",
+        ),
+      ).to eq("rgb(191, 30, 46)")
       expect(page).to have_css(".kuu-buddy-applications__private", text: "只有你能看到")
       expect(item).to have_css(".kuu-buddy-applications__message", text: "我会打日麻")
 
@@ -101,7 +112,9 @@ RSpec.describe "Asking to join and managing members" do
       topic_page.visit_topic(topic)
 
       find(".kuu-buddy-applications__decline").click
-      dialog.click_yes
+      # 婉拒是危险操作：红色确认按钮「婉拒」（Issue #11）
+      expect(page).to have_css(".dialog-footer .btn-danger", text: "婉拒")
+      dialog.click_danger
 
       expect(page).to have_no_css(".kuu-buddy-applications__item")
       expect(application.reload.status).to eq("declined")
@@ -147,7 +160,8 @@ RSpec.describe "Asking to join and managing members" do
         ".kuu-buddy-members__item[data-username='#{applicant.username}'] .kuu-buddy-members__menu",
       ).click
       find(".kuu-buddy-members__remove").click
-      dialog.click_yes
+      expect(page).to have_css(".dialog-footer .btn-danger", text: "移出")
+      dialog.click_danger
 
       expect(page).to have_no_css(".kuu-buddy-members__item[data-username='#{applicant.username}']")
       expect(activity.applications.find_by(user: applicant).status).to eq("removed")

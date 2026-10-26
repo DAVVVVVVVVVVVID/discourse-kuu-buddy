@@ -6,6 +6,30 @@
   --kuu-buddy-cream: #fcf9f2;
   --kuu-buddy-recruiting-color: #1e7b3c;
   --kuu-buddy-recruiting-bg: #e6f4ea;
+
+  // 发起人处理申请的「接受」「婉拒」（Issue #11，和二手插件统一：绿是【出售】前缀的绿，红是二手市场分类色）
+  --kuu-buddy-accept-color: #1e7b3c;
+  --kuu-buddy-decline-color: #bf1e2e;
+}
+
+// 实心按钮：白字，悬停、按下稍微加深
+@mixin kuu-buddy-solid-button($color) {
+  background: $color;
+  color: #fff;
+
+  .d-icon,
+  .d-button-label {
+    color: #fff;
+  }
+
+  &:hover,
+  &:focus-visible {
+    background: color-mix(in srgb, $color 85%, black);
+  }
+
+  &:active {
+    background: color-mix(in srgb, $color 70%, black);
+  }
 }
 
 .kuu-buddy-status {
@@ -289,8 +313,9 @@ body.kuu-buddy-topic {
     font-size: var(--font-down-1);
   }
 
+  // 正向操作不用红 / 粉色（Issue #11），和「活动结束」「进群」一样用藏青
   &__submit.btn-primary {
-    background: var(--kuu-buddy-sakura);
+    @include kuu-buddy-solid-button(var(--kuu-buddy-navy));
   }
 }
 
@@ -434,8 +459,12 @@ body.kuu-buddy-topic {
     gap: var(--space-2);
   }
 
-  &__accept.btn-primary {
-    background: var(--kuu-buddy-sakura);
+  &__accept.btn {
+    @include kuu-buddy-solid-button(var(--kuu-buddy-accept-color));
+  }
+
+  &__decline.btn {
+    @include kuu-buddy-solid-button(var(--kuu-buddy-decline-color));
   }
 }
 
@@ -549,7 +578,7 @@ body.kuu-buddy-topic {
 
   &__submit.btn-primary,
   &__confirm.btn-primary {
-    background: var(--kuu-buddy-sakura);
+    @include kuu-buddy-solid-button(var(--kuu-buddy-navy));
   }
 }
 
