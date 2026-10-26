@@ -147,10 +147,19 @@
 }
 
 // 第一楼的正文和面板内容一样（初始化器给第一楼加的类名）：普通用户整楼藏起来，
-// 标题旁的编辑笔也藏（标题只能用表单改）；管理员只藏正文，保留编辑和管理入口
+// 标题旁的编辑笔也藏（标题只能用表单改）；管理员只藏正文，保留编辑和管理入口。
+// 不能用 display: none：搭子帖常常只有这一楼，帖子流里就没有大小不为 0 的东西，
+// core 帖子流的可见性跟踪（cloaking）来回切换，页面底部的按钮上下抖（Issue #9）。
+// 改成固定 1px 高、内容裁掉的「视觉隐藏」
 body.kuu-buddy-topic {
   .topic-post.kuu-buddy-first-post {
-    display: none;
+    position: relative;
+    height: 1px;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    clip-path: inset(50%);
   }
 
   #topic-title .edit-topic__wrapper {

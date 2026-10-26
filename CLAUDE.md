@@ -26,7 +26,7 @@
 - 只有人满自动开始的才会在有人退出时回到招募中；发起人手动「开始活动」的不会（`start_reason`）
 - 招募中不能直接「活动结束」（Issue 的状态流程没有这一步），发起人不办了可以删帖
 - 列表筛选（`kuu_buddy` 参数）：「招募中」「我发起的」，都不选时显示全部（招募中 + 活动开始）。「我发起的」连自己已结束、过期的一起显示
-- 第一楼正文和帖子上方的面板内容一样，插件开着时由 CSS 藏起来（`post-class` 加 `kuu-buddy-first-post`）
+- 第一楼正文和帖子上方的面板内容一样，插件开着时由 CSS 藏起来（`post-class` 加 `kuu-buddy-first-post`）。**不能用 `display: none`**：搭子帖常常只有这一楼，帖子流里没有大小不为 0 的东西，core 帖子流的可见性跟踪来回切，页面底部按钮上下抖、有时不出来（Issue #9，2026-10-26）。现在用 1px 高、内容裁掉的视觉隐藏，`spec/system/topic_page_stability_spec.rb` 测底部按钮稳定
 - 个人主页放出隐藏帖：和二手插件共用 `KuuProfileTopics`（plugin.rb 开头那一段，两个插件要保持一样，二手 Issue #19）。各插件往 `SOURCES` 登记自己的来源、各自注册 modifier，条件由 `reveal` 合成一个 OR。**不能只注册一次**：core 只在登记 modifier 的插件开着时才执行它
 - **不要用包裹型的 `topic-link` outlet**：它只能有一个插件用，二手插件在用。搭子以前也包了它，结果二手卡片不见、管理员每行看到警告（Issue #6，2026-10-25 线上事故）。`about.json` 让 CI 一起装二手插件，`spec/system/with_market_spec.rb` 测两种卡片同时在
 - custom 类型的站内通知只能登记一种显示，二手插件也登记了。本插件等第一次换页时在当时登记的显示上再包一层（`lib/kuu-buddy-notifications.js`），不会覆盖二手的
