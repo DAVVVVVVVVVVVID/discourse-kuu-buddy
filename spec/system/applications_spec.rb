@@ -46,6 +46,22 @@ RSpec.describe "Asking to join and managing members" do
     expect(activity.applications.order(:id).last.message).to eq("")
   end
 
+  # 管理员能管理所有搭子帖，但在别人的帖子上和普通用户一样能申请；发起人自己没有申请按钮
+  it "lets staff apply to someone else's activity, keeping the management buttons" do
+    sign_in(Fabricate(:admin))
+    topic_page.visit_topic(topic)
+
+    expect(page).to have_css(".kuu-buddy-actions__edit")
+    apply(message: "运营号也来凑个数")
+    expect(page).to have_css(".kuu-buddy-actions__edit")
+
+    sign_in(organizer)
+    topic_page.visit_topic(topic)
+
+    expect(page).to have_css(".kuu-buddy-actions__edit")
+    expect(page).to have_no_css(".kuu-buddy-join__apply")
+  end
+
   it "sends visitors who are not logged in to log in" do
     topic_page.visit_topic(topic)
 

@@ -60,8 +60,9 @@
 - 截图（7 个界面，电脑 + iPhone 宽度）：本地的 `spec/system/screenshots_spec.rb`（写在 `.git/info/exclude` 里，不提交），`kuu-rspec spec/system/screenshots_spec.rb`，图片在 `screenshots/`。用的是测试库，不碰共用的开发库；测试环境没有 FKB Pro 和 KUU 主题，样式以插件自己的为准
 - lint 在容器里跑：`docker exec -u discourse -w /src discourse_dev bin/lint --fix plugins/discourse-kuu-buddy/<文件...>`。CI 还会跑插件自己的 `pnpm lint`（含类型检查）：`docker exec -u discourse -w /src/plugins/discourse-kuu-buddy discourse_dev pnpm lint`
   - `bin/lint` 会不带 `--frozen-lockfile` 装一次依赖，把 `pnpm-lock.yaml` 改掉。提交前 `git checkout pnpm-lock.yaml`
+  - `pnpm-lock.yaml` 开头那一段（`packageManagerDependencies`，记录 `package.json` 锁定的 pnpm 12.11.2）不能删：CI 镜像里的 pnpm 版本和它不一样时要靠这一段切换，少了会在 CI 的 lint 报 `ERR_PNPM_FROZEN_LOCKFILE_WITH_OUTDATED_LOCKFILE`（2026-10-26）。重新生成用别的 pnpm 版本装一次：`npx -y pnpm@12.10.0 install`
   - rubocop 自动改出的长行 stree 不会再格式化，看到 rubocop 有 `corrected` 时再跑一遍 `bin/lint --fix`
-- 改了数据库要更新模型末尾的 Schema 注释（CI 的 annotations 检查）：`docker exec -u discourse -w /src -e RAILS_ENV=test -e TEST_ENV_NUMBER=9 -e LOAD_PLUGINS=1 -e SKIP_OPTIMIZE_ICONS=1 discourse_dev bin/annotaterb models --force --model-dir plugins/discourse-kuu-buddy/app/models`
+- 改了数据库要更新模型末尾的 Schema 注释（CI 的 annotations 检查）。**部分索引的条件不要写 `col IN (...)`**，写成 `col = 'a' OR col = 'b'`：IN 的写法从头迁移和载入数据库结构后打印出的格式不一样，CI 的注释检查时过时不过（2026-10-26 踩过，`kuu_buddy_applications` 的索引已改成 OR）。本地生成：`docker exec -u discourse -w /src -e RAILS_ENV=test -e TEST_ENV_NUMBER=9 -e LOAD_PLUGINS=1 -e SKIP_OPTIMIZE_ICONS=1 discourse_dev bin/annotaterb models --force --model-dir plugins/discourse-kuu-buddy/app/models`
 - 开发库（`discourse_development`）大家共用：为了测试改了站点设置、用户设置，测完改回来，并在回复里写明
 - 截图、临时文件放 `screenshots/`（不提交）或 `~/discourse/tmp/discourse-kuu-buddy/`
 - `plugin.rb` 的 `required_version` 保持 `2026.1.0`，**不要写当前版本号**（开发和线上是 `2026.10.0-latest`，比 `2026.10.0` 低，写高了插件不激活、Rails 启动报错）

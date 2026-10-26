@@ -60,6 +60,6 @@ end
 # Indexes
 #
 #  index_kuu_buddy_applications_on_activity_id_and_status  (activity_id,status)
-#  index_kuu_buddy_applications_on_open                    (activity_id,user_id) UNIQUE WHERE ((status)::text = ANY ((ARRAY['pending'::character varying, 'accepted'::character varying])::text[]))
+#  index_kuu_buddy_applications_on_open                    (activity_id,user_id) UNIQUE WHERE (((status)::text = 'pending'::text) OR ((status)::text = 'accepted'::text))
 #  index_kuu_buddy_applications_on_user_id_and_status      (user_id,status)
 #

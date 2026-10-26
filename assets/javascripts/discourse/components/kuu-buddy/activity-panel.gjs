@@ -79,6 +79,14 @@ export default class ActivityPanel extends Component {
     return this.activity.expires_at && shortDate(this.activity.expires_at);
   }
 
+  // 管理员能管理所有搭子帖，但在别人的帖子上和普通用户一样可以申请（Issue #1：鲸仔、运营号和普通用户一样）。
+  // 只有发起人本人没有申请那一栏
+  get isOrganizer() {
+    return (
+      !!this.currentUser && this.currentUser.id === this.activity.organizer?.id
+    );
+  }
+
   // 发起人看到：有成员没能拉进群聊（关了私聊、屏蔽了发起人等）
   get outOfChatCount() {
     if (!this.activity.can_manage || this.activity.status === "ended") {
@@ -205,12 +213,13 @@ export default class ActivityPanel extends Component {
             @activity={{this.activity}}
             @onChange={{this.updateActivity}}
           />
-        {{else}}
+        {{/if}}
+        {{#unless this.isOrganizer}}
           <JoinBar
             @activity={{this.activity}}
             @onChange={{this.updateActivity}}
           />
-        {{/if}}
+        {{/unless}}
       </div>
     {{/if}}
   </template>
