@@ -90,7 +90,13 @@ RSpec.describe "Posting and managing a buddy topic" do
       topic_page.visit_topic(topic)
 
       expect(page).to have_css(".kuu-buddy-panel")
-      expect(page).to have_no_css("#post_1", visible: :visible)
+      # 视觉隐藏（1px 高、内容裁掉），不是 display: none，见 Issue #9
+      expect(page).to have_css("body.kuu-buddy-topic .topic-post.kuu-buddy-first-post")
+      expect(
+        page.evaluate_script(
+          "document.querySelector('.topic-post.kuu-buddy-first-post').getBoundingClientRect().height",
+        ),
+      ).to be <= 1
       expect(page).to have_no_css("#topic-title .edit-topic", visible: :visible)
 
       sign_in(Fabricate(:admin))
